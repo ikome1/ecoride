@@ -195,7 +195,27 @@ function loadTrips(user) {
         // Afficher d'abord les voyages depuis user.trips
         passengerTripsList.forEach(trip => {
             const tripCard = document.createElement('div');
-            tripCard.className = 'bg-blue-50 border border-blue-200 rounded-lg p-3';
+            tripCard.className = 'bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2';
+            tripCard.id = `trip-${trip.id}`;
+            
+            // Bouton d'annulation pour les passagers
+            let cancelButton = '';
+            if (trip.statut === 'confirmé' || trip.statut === 'en attente') {
+                cancelButton = `
+                    <button onclick="cancelTrip(${trip.id}, 'passager')" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
+                        ❌ Annuler
+                    </button>
+                `;
+            } else if (trip.statut === 'en cours') {
+                cancelButton = '<span class="text-orange-600 text-sm">Trajet en cours</span>';
+            } else if (trip.statut === 'terminé') {
+                cancelButton = `
+                    <button onclick="validateTrip(${trip.id})" class="mt-2 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                        ✅ Valider le trajet
+                    </button>
+                `;
+            }
+            
             tripCard.innerHTML = `
                 <div class="flex justify-between items-start">
                     <div>
@@ -210,6 +230,9 @@ function loadTrips(user) {
                         </span>
                     </div>
                 </div>
+                <div class="mt-2">
+                    ${cancelButton}
+                </div>
             `;
             passengerTrips.appendChild(tripCard);
         });
@@ -218,6 +241,17 @@ function loadTrips(user) {
         userReservations.forEach(reservation => {
             const tripCard = document.createElement('div');
             tripCard.className = 'bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2';
+            tripCard.id = `reservation-${reservation.id}`;
+            
+            let cancelButton = '';
+            if (reservation.status === 'confirmed') {
+                cancelButton = `
+                    <button onclick="cancelReservation(${reservation.id})" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
+                        ❌ Annuler
+                    </button>
+                `;
+            }
+            
             tripCard.innerHTML = `
                 <div class="flex justify-between items-start">
                     <div>
@@ -231,6 +265,9 @@ function loadTrips(user) {
                             ${reservation.status === 'confirmed' ? 'Confirmé' : reservation.status}
                         </span>
                     </div>
+                </div>
+                <div class="mt-2">
+                    ${cancelButton}
                 </div>
             `;
             passengerTrips.appendChild(tripCard);
@@ -252,7 +289,32 @@ function loadTrips(user) {
     } else {
         driverTripsList.forEach(trip => {
             const tripCard = document.createElement('div');
-            tripCard.className = 'bg-green-50 border border-green-200 rounded-lg p-3';
+            tripCard.className = 'bg-green-50 border border-green-200 rounded-lg p-3 mb-2';
+            tripCard.id = `trip-${trip.id}`;
+            
+            // Déterminer les boutons selon le statut
+            let actionButtons = '';
+            if (trip.statut === 'en attente' || trip.statut === 'confirmé') {
+                actionButtons = `
+                    <button onclick="startTrip(${trip.id})" class="mt-2 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                        ▶️ Démarrer
+                    </button>
+                    <button onclick="cancelTrip(${trip.id}, 'chauffeur')" class="mt-2 ml-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
+                        ❌ Annuler
+                    </button>
+                `;
+            } else if (trip.statut === 'en cours') {
+                actionButtons = `
+                    <button onclick="endTrip(${trip.id})" class="mt-2 bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700">
+                        🏁 Arrivée à destination
+                    </button>
+                `;
+            } else if (trip.statut === 'annulé') {
+                actionButtons = '<span class="text-red-600 text-sm">Trajet annulé</span>';
+            } else if (trip.statut === 'terminé') {
+                actionButtons = '<span class="text-green-600 text-sm">Trajet terminé</span>';
+            }
+            
             tripCard.innerHTML = `
                 <div class="flex justify-between items-start">
                     <div>
@@ -266,6 +328,9 @@ function loadTrips(user) {
                             ${trip.statut}
                         </span>
                     </div>
+                </div>
+                <div class="mt-2">
+                    ${actionButtons}
                 </div>
             `;
             driverTrips.appendChild(tripCard);
@@ -811,3 +876,175 @@ function createVehiclesChart(vehicles) {
         }
     });
 }
+
+// Fonction pour démarrer un trajet (US 11)
+function startTrip(tripId) {
+    if (!confirm('Démarrer ce covoiturage ? Les participants seront notifiés.')) {
+        return;
+    }
+    
+    const user = userManager.getCurrentUser();
+    const trip = user.trips.find(t => t.id === tripId && t.type === 'chauffeur');
+    
+    if (!trip) {
+        alert('Trajet introuvable');
+        return;
+    }
+    
+    // Mettre à jour le statut
+    trip.statut = 'en cours';
+    trip.dateDebut = new Date().toISOString();
+    userManager.updateUserProfile(user.id, { trips: user.trips });
+    
+    // Simuler l'envoi d'un mail aux participants
+    console.log('📧 Mail envoyé aux participants pour le démarrage du trajet');
+    
+    alert('✅ Trajet démarré ! Les participants ont été notifiés.');
+    loadTrips(userManager.getCurrentUser());
+}
+
+// Fonction pour arrêter un trajet (US 11)
+function endTrip(tripId) {
+    if (!confirm('Confirmer l\'arrivée à destination ? Les participants devront valider le trajet.')) {
+        return;
+    }
+    
+    const user = userManager.getCurrentUser();
+    const trip = user.trips.find(t => t.id === tripId && t.type === 'chauffeur');
+    
+    if (!trip) {
+        alert('Trajet introuvable');
+        return;
+    }
+    
+    // Mettre à jour le statut
+    trip.statut = 'terminé';
+    trip.dateFin = new Date().toISOString();
+    userManager.updateUserProfile(user.id, { trips: user.trips });
+    
+    // Simuler l'envoi d'un mail aux participants
+    console.log('📧 Mail envoyé aux participants pour valider le trajet');
+    
+    alert('✅ Trajet terminé ! Les participants ont été notifiés et doivent valider le trajet.');
+    loadTrips(userManager.getCurrentUser());
+}
+
+// Fonction pour annuler un trajet (US 10)
+function cancelTrip(tripId, role) {
+    if (!confirm('⚠️ Êtes-vous sûr de vouloir annuler ce trajet ? Les crédits seront remboursés.')) {
+        return;
+    }
+    
+    const user = userManager.getCurrentUser();
+    let trip = null;
+    
+    if (role === 'chauffeur') {
+        trip = user.trips.find(t => t.id === tripId && t.type === 'chauffeur');
+        if (trip) {
+            trip.statut = 'annulé';
+            // Rembourser les passagers (simulation)
+            console.log('📧 Mails envoyés aux passagers pour l\'annulation');
+        }
+    } else if (role === 'passager') {
+        trip = user.trips.find(t => t.id === tripId && t.type === 'passager');
+        if (trip) {
+            // Rembourser les crédits
+            user.credits = (user.credits || 0) + trip.prix + 2; // Prix + frais plateforme
+            trip.statut = 'annulé';
+            userManager.updateUserProfile(user.id, { trips: user.trips, credits: user.credits });
+            alert(`✅ Trajet annulé. ${trip.prix + 2} crédits ont été remboursés.`);
+        }
+    }
+    
+    if (!trip) {
+        alert('Trajet introuvable');
+        return;
+    }
+    
+    userManager.updateUserProfile(user.id, { trips: user.trips });
+    loadTrips(userManager.getCurrentUser());
+    loadUserData(userManager.getCurrentUser());
+}
+
+// Fonction pour annuler une réservation
+function cancelReservation(reservationId) {
+    if (!confirm('⚠️ Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+        return;
+    }
+    
+    const user = userManager.getCurrentUser();
+    let reservations = JSON.parse(localStorage.getItem('ecoride_reservations') || '[]');
+    const reservation = reservations.find(r => r.id === reservationId && r.userId === user.id);
+    
+    if (!reservation) {
+        alert('Réservation introuvable');
+        return;
+    }
+    
+    // Rembourser les crédits
+    user.credits = (user.credits || 0) + (reservation.totalCost || reservation.price + 2);
+    userManager.updateUserProfile(user.id, { credits: user.credits });
+    
+    // Supprimer la réservation
+    reservations = reservations.filter(r => r.id !== reservationId);
+    localStorage.setItem('ecoride_reservations', JSON.stringify(reservations));
+    
+    alert(`✅ Réservation annulée. ${reservation.totalCost || reservation.price + 2} crédits ont été remboursés.`);
+    loadTrips(userManager.getCurrentUser());
+    loadUserData(userManager.getCurrentUser());
+}
+
+// Fonction pour valider un trajet terminé (US 11)
+function validateTrip(tripId) {
+    const user = userManager.getCurrentUser();
+    const trip = user.trips.find(t => t.id === tripId && t.type === 'passager');
+    
+    if (!trip) {
+        alert('Trajet introuvable');
+        return;
+    }
+    
+    // Demander une note et un avis
+    const note = prompt('Donnez une note au conducteur (1-5) :', '5');
+    const commentaire = prompt('Laissez un commentaire (optionnel) :', '');
+    
+    if (note && parseInt(note) >= 1 && parseInt(note) <= 5) {
+        // Créer un avis
+        const review = {
+            id: Date.now(),
+            tripId: tripId,
+            passager: user.pseudo,
+            conducteur: trip.conducteur,
+            note: parseInt(note),
+            commentaire: commentaire || '',
+            date: new Date().toISOString().split('T')[0],
+            statut: 'en attente' // Doit être validé par un employé
+        };
+        
+        let reviews = JSON.parse(localStorage.getItem('ecoride_reviews') || '[]');
+        reviews.push(review);
+        localStorage.setItem('ecoride_reviews', JSON.stringify(reviews));
+        
+        trip.statut = 'validé';
+        userManager.updateUserProfile(user.id, { trips: user.trips });
+        
+        alert('✅ Trajet validé ! Votre avis a été soumis et sera vérifié par un employé.');
+        loadTrips(userManager.getCurrentUser());
+    } else {
+        alert('Note invalide. Le trajet reste en attente de validation.');
+    }
+}
+
+// Exporter les fonctions
+window.showTab = showTab;
+window.saveProfile = saveProfile;
+window.showAddVehicleModal = showAddVehicleModal;
+window.hideAddVehicleModal = hideAddVehicleModal;
+window.removeVehicle = removeVehicle;
+window.reserveTrip = reserveTrip;
+window.showTripDetails = showTripDetails;
+window.startTrip = startTrip;
+window.endTrip = endTrip;
+window.cancelTrip = cancelTrip;
+window.cancelReservation = cancelReservation;
+window.validateTrip = validateTrip;

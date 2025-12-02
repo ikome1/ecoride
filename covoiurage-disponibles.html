@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/home.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/covoiturage.css">
     <title>EcoRide - Covoiturages Disponibles</title>
 </head>
-
 <body>
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="logo">
-            <img src="images/EcoRide 🌿.png" alt="Logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo EcoRide">
         </div>
         <ul class="nav-links">
             <li><a href="home.html">Accueil</a></li>
@@ -22,120 +22,161 @@
         </ul>
     </nav>
 
-    <main class="min-h-screen bg-gray-50 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- En-tête -->
-            <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-green-700 mb-4">🚗 Covoiturages Disponibles</h1>
-                <p class="text-gray-600 text-lg">Trouvez le covoiturage qui vous convient parmi nos offres disponibles</p>
-            </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">🚗 Covoiturages Disponibles <span class="emoji">🌿</span></h1>
+            <p class="hero-subtitle">Trouvez le trajet parfait parmi nos offres</p>
+            <p class="hero-description">Plus de 12 trajets disponibles • Des conducteurs vérifiés • Prix compétitifs</p>
+        </div>
+    </section>
 
-            <!-- Filtres de recherche -->
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h2 class="text-xl font-bold mb-4">🔍 Rechercher un covoiturage</h2>
-                <form id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <input type="text" id="filterDepart" placeholder="Ville de départ" 
-                           class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <input type="text" id="filterDestination" placeholder="Ville de destination" 
-                           class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <input type="date" id="filterDate" 
-                           class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition">
-                        Rechercher
-                    </button>
+    <!-- Formulaire de recherche -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <h2 class="search-title">🔍 Rechercher un covoiturage</h2>
+                <form id="searchForm" class="search-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <span class="input-icon">📍</span>
+                            <input type="text" name="depart" id="depart" placeholder="Ville de départ">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">🎯</span>
+                            <input type="text" name="destination" id="destination" placeholder="Ville d'arrivée">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">📅</span>
+                            <input type="date" name="date" id="date">
+                        </div>
+                        <button type="submit" class="btn-search">
+                            <span>🔍</span>
+                            <span>Rechercher</span>
+                        </button>
+                        <button type="button" id="resetButton" class="btn-reset">🔄</button>
+                    </div>
                 </form>
-                <button id="resetFilters" class="mt-4 text-green-600 hover:text-green-700 font-medium">
-                    Réinitialiser les filtres
-                </button>
-            </div>
-
-            <!-- Liste des covoiturages -->
-            <div id="tripsList" class="space-y-6">
-                <!-- Les covoiturages seront affichés ici -->
-            </div>
-
-            <!-- Message si aucun covoiturage -->
-            <div id="noTripsMessage" class="hidden text-center py-12">
-                <div class="text-6xl mb-4">🚗</div>
-                <h3 class="text-2xl font-bold text-gray-700 mb-2">Aucun covoiturage disponible</h3>
-                <p class="text-gray-600">Essayez de modifier vos critères de recherche</p>
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- Modal de paiement -->
-    <div id="paymentModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">💳 Paiement</h3>
-                
-                <!-- Détails de la réservation -->
-                <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-gray-600">Trajet:</span>
-                        <span class="font-semibold" id="paymentTripDetails"></span>
-                    </div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-gray-600">Chauffeur:</span>
-                        <span class="font-semibold" id="paymentDriver"></span>
-                    </div>
-                    <div class="flex justify-between border-t pt-2">
-                        <span class="text-gray-900 font-bold">Total:</span>
-                        <span class="text-2xl font-bold text-green-600" id="paymentAmount"></span>
-                    </div>
-                </div>
+    <!-- Section des trajets -->
+    <section class="trips-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Trajets disponibles</h2>
+                <div class="trips-count" id="tripsCount">12 trajets trouvés</div>
+            </div>
 
-                <!-- Méthode de paiement -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Choisir votre méthode de paiement</label>
-                    
-                    <div class="space-y-2">
-                        <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="paymentMethod" value="card" class="h-4 w-4 text-green-600" checked>
-                            <span class="ml-3 text-gray-700">
-                                <span class="font-medium">💳 Carte bancaire</span>
-                                <p class="text-xs text-gray-500">Visa, Mastercard, etc.</p>
-                            </span>
-                        </label>
-                        
-                        <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="paymentMethod" value="paypal" class="h-4 w-4 text-green-600">
-                            <span class="ml-3 text-gray-700">
-                                <span class="font-medium">🅿️ PayPal</span>
-                                <p class="text-xs text-gray-500">Payer avec votre compte PayPal</p>
-                            </span>
-                        </label>
+            <!-- Filtres rapides -->
+            <div class="quick-filters">
+                <button class="filter-chip active" data-filter="all">Tous</button>
+                <button class="filter-chip" data-filter="electrique">⚡ Électrique</button>
+                <button class="filter-chip" data-filter="disponible">✅ Disponible</button>
+            </div>
+
+            <!-- Filtres avancés -->
+            <div class="advanced-filters">
+                <h3 class="filters-title">🔧 Filtres avancés</h3>
+                <div class="filters-grid">
+                    <div class="filter-item">
+                        <label>Prix maximum (€)</label>
+                        <input type="number" id="filterMaxPrice" min="0" max="100" value="100" class="filter-input-number">
+                        <span id="maxPriceValue">100€</span>
+                    </div>
+                    <div class="filter-item">
+                        <label>Durée maximum (heures)</label>
+                        <input type="number" id="filterMaxDuration" min="0" max="10" value="10" step="0.5" class="filter-input-number">
+                        <span id="maxDurationValue">10h</span>
+                    </div>
+                    <div class="filter-item">
+                        <label>Note minimale</label>
+                        <input type="number" id="filterMinRating" min="0" max="5" value="0" step="0.1" class="filter-input-number">
+                        <span id="minRatingValue">0⭐</span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Message de simulation -->
-                <div class="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-lg mb-4 text-sm">
-                    ℹ️ <strong>Mode démo:</strong> Ceci est une simulation de paiement pour le projet scolaire. Aucun vrai paiement ne sera effectué.
-                </div>
+            <!-- Grille des trajets -->
+            <div id="tripsGrid" class="trips-grid">
+                <!-- Les trajets seront affichés ici par JavaScript -->
+            </div>
 
-                <!-- Boutons -->
-                <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="hidePaymentModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
-                        Annuler
-                    </button>
-                    <button type="button" onclick="processPayment()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
-                        Payer et réserver
-                    </button>
+            <!-- Message si aucun trajet -->
+            <div id="noTrips" class="no-trips-message hidden">
+                <div class="no-trips-icon">🚗</div>
+                <h3>Aucun trajet trouvé</h3>
+                <p id="noTripsMessage">Essayez de modifier vos critères de recherche</p>
+                <div id="alternativeDate" class="alternative-date hidden">
+                    <p><strong>💡 Suggestion :</strong> Un trajet est disponible le <span id="suggestedDate"></span></p>
+                    <button class="btn-suggested-date" onclick="useSuggestedDate()">Voir ce trajet</button>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de réservation -->
+    <div id="bookingModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeBookingModal()">×</button>
+            <div class="modal-header">
+                <h2>💳 Finaliser votre réservation</h2>
+            </div>
+            
+            <div class="booking-summary" id="bookingSummary">
+                <!-- Résumé de la réservation -->
+            </div>
+
+            <div class="payment-section">
+                <h3>Méthode de paiement</h3>
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="card" checked>
+                        <div class="payment-option-content">
+                            <span class="payment-icon">💳</span>
+                            <div>
+                                <div class="payment-name">Carte bancaire</div>
+                                <div class="payment-desc">Visa, Mastercard, CB</div>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="paypal">
+                        <div class="payment-option-content">
+                            <span class="payment-icon">🅿️</span>
+                            <div>
+                                <div class="payment-name">PayPal</div>
+                                <div class="payment-desc">Payer avec PayPal</div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="demo-notice">
+                <span>ℹ️</span>
+                <span><strong>Mode démo :</strong> Aucun paiement réel ne sera effectué</span>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeBookingModal()">Annuler</button>
+                <button class="btn-confirm" onclick="confirmBooking()">Confirmer et payer</button>
             </div>
         </div>
     </div>
 
     <script src="js/userManager.js"></script>
     <script src="js/tripManager.js"></script>
+    <script src="js/apiClient.js"></script>
     <script src="js/navbar.js"></script>
     <script>
-        // Covoiturages de démonstration
+        // Données des trajets avec 12 chauffeurs différents
         const demoTrips = [
             {
                 id: 1,
                 driver: 'Jean Dupont',
-                driverPhoto: 'images/dupont.jpeg',
+                driverPhoto: 'https://i.pravatar.cc/150?img=12',
                 departure: 'Paris',
                 destination: 'Lyon',
                 date: '2025-10-20',
@@ -147,12 +188,12 @@
                 vehicle: 'Renault Zoe',
                 vehicleType: 'Électrique',
                 rating: 4.8,
-                description: 'Trajet confortable en voiture électrique, réservation possible.'
+                description: 'Trajet confortable en voiture électrique, réservation possible. Conduite douce et ponctuelle.'
             },
             {
                 id: 2,
                 driver: 'Marie Martin',
-                driverPhoto: 'images/dupont.jpeg',
+                driverPhoto: 'https://i.pravatar.cc/150?img=47',
                 departure: 'Lyon',
                 destination: 'Marseille',
                 date: '2025-10-21',
@@ -164,12 +205,12 @@
                 vehicle: 'Tesla Model 3',
                 vehicleType: 'Électrique',
                 rating: 5.0,
-                description: 'Conducteur expérimenté, voyage agréable garanti.'
+                description: 'Conductrice expérimentée, voyage agréable garanti. Ambiance conviviale et musique douce.'
             },
             {
                 id: 3,
                 driver: 'Pierre Dubois',
-                driverPhoto: 'images/dupont.jpeg',
+                driverPhoto: 'https://i.pravatar.cc/150?img=33',
                 departure: 'Paris',
                 destination: 'Bordeaux',
                 date: '2025-10-22',
@@ -178,15 +219,15 @@
                 price: 30,
                 availableSeats: 1,
                 totalSeats: 4,
-                vehicle: 'Peugeot 208',
-                vehicleType: 'Essence',
+                vehicle: 'Peugeot e-208',
+                vehicleType: 'Électrique',
                 rating: 4.5,
-                description: 'Départ tôt le matin, arrivée avant midi.'
+                description: 'Départ tôt le matin, arrivée avant midi. Idéal pour les rendez-vous professionnels. Véhicule 100% électrique.'
             },
             {
                 id: 4,
                 driver: 'Sophie Laurent',
-                driverPhoto: 'images/dupont.jpeg',
+                driverPhoto: 'https://i.pravatar.cc/150?img=45',
                 departure: 'Bordeaux',
                 destination: 'Paris',
                 date: '2025-10-23',
@@ -198,139 +239,421 @@
                 vehicle: 'Nissan Leaf',
                 vehicleType: 'Électrique',
                 rating: 4.9,
-                description: 'Véhicule électrique, départ confortable de l\'après-midi.'
+                description: 'Véhicule électrique, départ confortable de l\'après-midi. Pauses possibles.'
+            },
+            {
+                id: 5,
+                driver: 'Thomas Bernard',
+                driverPhoto: 'https://i.pravatar.cc/150?img=15',
+                departure: 'Lille',
+                destination: 'Paris',
+                date: '2025-10-24',
+                time: '10:00',
+                duration: '2h15',
+                price: 18,
+                availableSeats: 2,
+                totalSeats: 4,
+                vehicle: 'BMW i3',
+                vehicleType: 'Électrique',
+                rating: 4.7,
+                description: 'Trajet régulier, ponctuel et professionnel. Confort premium garanti.'
+            },
+            {
+                id: 6,
+                driver: 'Camille Rousseau',
+                driverPhoto: 'https://i.pravatar.cc/150?img=20',
+                departure: 'Toulouse',
+                destination: 'Montpellier',
+                date: '2025-10-25',
+                time: '11:30',
+                duration: '2h45',
+                price: 22,
+                availableSeats: 4,
+                totalSeats: 5,
+                vehicle: 'Hyundai Kona Electric',
+                vehicleType: 'Électrique',
+                rating: 4.9,
+                description: 'Ambiance conviviale, musique douce, pauses possibles. Voyage détendu.'
+            },
+            {
+                id: 7,
+                driver: 'Lucas Moreau',
+                driverPhoto: 'https://i.pravatar.cc/150?img=27',
+                departure: 'Nantes',
+                destination: 'Rennes',
+                date: '2025-10-26',
+                time: '13:00',
+                duration: '1h30',
+                price: 15,
+                availableSeats: 3,
+                totalSeats: 5,
+                vehicle: 'Volkswagen ID.3',
+                vehicleType: 'Électrique',
+                rating: 4.6,
+                description: 'Trajet court et économique, idéal pour un déplacement rapide. Ponctuel.'
+            },
+            {
+                id: 8,
+                driver: 'Emma Petit',
+                driverPhoto: 'https://i.pravatar.cc/150?img=9',
+                departure: 'Strasbourg',
+                destination: 'Nancy',
+                date: '2025-10-27',
+                time: '16:00',
+                duration: '1h15',
+                price: 12,
+                availableSeats: 2,
+                totalSeats: 4,
+                vehicle: 'Renault Twingo E-Tech',
+                vehicleType: 'Électrique',
+                rating: 5.0,
+                description: 'Conductrice très sympa, trajet agréable garanti. Ambiance chaleureuse.'
+            },
+            {
+                id: 9,
+                driver: 'Antoine Girard',
+                driverPhoto: 'https://i.pravatar.cc/150?img=51',
+                departure: 'Nice',
+                destination: 'Cannes',
+                date: '2025-10-28',
+                time: '09:30',
+                duration: '45min',
+                price: 10,
+                availableSeats: 1,
+                totalSeats: 3,
+                vehicle: 'Smart EQ ForTwo',
+                vehicleType: 'Électrique',
+                rating: 4.8,
+                description: 'Petit véhicule écologique, parfait pour la Côte d\'Azur. Vue magnifique.'
+            },
+            {
+                id: 10,
+                driver: 'Julie Lefebvre',
+                driverPhoto: 'https://i.pravatar.cc/150?img=32',
+                departure: 'Lyon',
+                destination: 'Grenoble',
+                date: '2025-10-29',
+                time: '12:00',
+                duration: '1h',
+                price: 14,
+                availableSeats: 3,
+                totalSeats: 5,
+                vehicle: 'Peugeot e-208',
+                vehicleType: 'Électrique',
+                rating: 4.7,
+                description: 'Trajet montagneux, paysages magnifiques, conduite douce. Détente assurée.'
+            },
+            {
+                id: 11,
+                driver: 'Nicolas Simon',
+                driverPhoto: 'https://i.pravatar.cc/150?img=68',
+                departure: 'Paris',
+                destination: 'Orléans',
+                date: '2025-10-30',
+                time: '08:30',
+                duration: '1h30',
+                price: 16,
+                availableSeats: 4,
+                totalSeats: 5,
+                vehicle: 'Citroën ë-C4',
+                vehicleType: 'Électrique',
+                rating: 4.9,
+                description: 'Confort optimal, véhicule récent et bien entretenu. Service premium.'
+            },
+            {
+                id: 12,
+                driver: 'Amélie Durand',
+                driverPhoto: 'https://i.pravatar.cc/150?img=5',
+                departure: 'Bordeaux',
+                destination: 'Toulouse',
+                date: '2025-10-31',
+                time: '14:00',
+                duration: '2h30',
+                price: 24,
+                availableSeats: 2,
+                totalSeats: 4,
+                vehicle: 'Kia e-Niro',
+                vehicleType: 'Électrique',
+                rating: 4.8,
+                description: 'Autonomie longue, confort premium, voyage serein. Expérience inoubliable.'
             }
         ];
 
-        // Fonction pour convertir un covoiturage du format tripManager au format de cette page
-        function convertTripFormat(trip) {
-            return {
-                id: trip.id,
-                driver: trip.conducteur?.nom || 'Conducteur inconnu',
-                driverPhoto: trip.conducteur?.photo || 'images/dupont.jpeg',
-                departure: trip.trajet?.depart || '',
-                destination: trip.trajet?.destination || '',
-                date: trip.details?.date || '',
-                time: trip.details?.heureDepart || '',
-                duration: trip.trajet?.duree || '',
-                price: trip.details?.prix || 0,
-                availableSeats: trip.details?.placesDisponibles || 0,
-                totalSeats: trip.details?.vehicule?.places || 0,
-                vehicle: `${trip.details?.vehicule?.marque || ''} ${trip.details?.vehicule?.modele || ''}`.trim(),
-                vehicleType: trip.details?.vehicule?.type || 'Inconnu',
-                rating: trip.conducteur?.note || 5.0,
-                description: trip.description || `Trajet de ${trip.trajet?.depart} vers ${trip.trajet?.destination}`
-            };
-        }
-
-        // Charger tous les covoiturages (démo + utilisateurs)
         let availableTrips = [...demoTrips];
-        
-        // Charger les covoiturages créés par les utilisateurs
+        let currentFilter = 'all';
+        let currentBooking = null;
+
+        // Charger les trajets utilisateurs
         if (typeof tripManager !== 'undefined') {
             tripManager.syncUserTrips();
             const userTrips = tripManager.getAllTrips();
-            const convertedUserTrips = userTrips.map(trip => convertTripFormat(trip));
-            availableTrips = [...demoTrips, ...convertedUserTrips];
-            console.log('Total covoiturages chargés:', availableTrips.length, '(démo:', demoTrips.length, ', utilisateurs:', convertedUserTrips.length, ')');
-        }
-
-        // Fonction pour trier les covoiturages par date (du plus récent au plus ancien)
-        function sortTripsByDate(trips) {
-            return trips.sort((a, b) => {
-                const dateA = new Date(a.date + 'T' + (a.time || '00:00')).getTime();
-                const dateB = new Date(b.date + 'T' + (b.time || '00:00')).getTime();
-                return dateB - dateA; // Plus récent en premier
+            userTrips.forEach(trip => {
+                availableTrips.push({
+                    id: trip.id + 1000,
+                    driver: trip.conducteur?.nom || 'Conducteur',
+                    driverPhoto: trip.conducteur?.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(trip.conducteur?.nom || 'Conducteur')}&background=66BB6A&color=fff&size=150`,
+                    departure: trip.trajet?.depart || '',
+                    destination: trip.trajet?.destination || '',
+                    date: trip.details?.date || '',
+                    time: trip.details?.heureDepart || '',
+                    duration: trip.trajet?.duree || '',
+                    price: trip.details?.prix || 0,
+                    availableSeats: trip.details?.placesDisponibles || 0,
+                    totalSeats: trip.details?.vehicule?.places || 0,
+                    vehicle: `${trip.details?.vehicule?.marque || ''} ${trip.details?.vehicule?.modele || ''}`.trim(),
+                    vehicleType: trip.details?.vehicule?.type || 'Électrique',
+                    rating: trip.conducteur?.note || 5.0,
+                    description: trip.description || 'Trajet disponible'
+                });
             });
         }
 
-        // Trier les covoiturages par date au chargement
-        availableTrips = sortTripsByDate(availableTrips);
-
-        // Fonction pour afficher les covoiturages
+        // Afficher les trajets
         function displayTrips(trips) {
-            const tripsList = document.getElementById('tripsList');
-            const noTripsMessage = document.getElementById('noTripsMessage');
-
+            const grid = document.getElementById('tripsGrid');
+            const noTrips = document.getElementById('noTrips');
+            
             if (trips.length === 0) {
-                tripsList.innerHTML = '';
-                noTripsMessage.classList.remove('hidden');
+                grid.innerHTML = '';
+                noTrips.classList.remove('hidden');
+                document.getElementById('tripsCount').textContent = '0 trajet trouvé';
                 return;
             }
 
-            noTripsMessage.classList.add('hidden');
-            tripsList.innerHTML = '';
-
-            trips.forEach(trip => {
-                const tripCard = document.createElement('div');
-                tripCard.className = 'bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow';
-                tripCard.innerHTML = `
-                    <div class="flex flex-col lg:flex-row justify-between">
-                        <div class="flex-1">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <img src="${trip.driverPhoto}" alt="${trip.driver}" class="w-16 h-16 rounded-full">
+            noTrips.classList.add('hidden');
+            document.getElementById('tripsCount').textContent = `${trips.length} trajet${trips.length > 1 ? 's' : ''} trouvé${trips.length > 1 ? 's' : ''}`;
+            
+            grid.innerHTML = trips.map((trip, index) => {
+                const dateObj = new Date(trip.date);
+                const formattedDate = dateObj.toLocaleDateString('fr-FR', { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long' 
+                });
+                
+                const seatsClass = trip.availableSeats === 0 ? 'seats-none' : 
+                                  trip.availableSeats <= 1 ? 'seats-low' : 'seats-ok';
+                
+                return `
+                    <div class="trip-card" style="animation-delay: ${index * 0.1}s">
+                        <div class="trip-card-header">
+                            <div class="driver-info">
+                                <img src="${trip.driverPhoto}" alt="${trip.driver}" class="driver-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(trip.driver)}&background=66BB6A&color=fff&size=150'">
                                 <div>
-                                    <h3 class="text-xl font-bold text-gray-900">${trip.driver}</h3>
-                                    <p class="text-yellow-500 text-lg">⭐ ${trip.rating}</p>
+                                    <h3 class="driver-name">${trip.driver}</h3>
+                                    <div class="driver-rating">
+                                        ${'⭐'.repeat(Math.floor(trip.rating))}${trip.rating % 1 >= 0.5 ? '✨' : ''}
+                                        <span>${trip.rating}</span>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <p class="text-gray-600 mb-1"><strong>Départ :</strong></p>
-                                    <p class="text-green-700 font-semibold">${trip.departure}</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-600 mb-1"><strong>Destination :</strong></p>
-                                    <p class="text-green-700 font-semibold">${trip.destination}</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-600 mb-1"><strong>Date :</strong></p>
-                                    <p>${new Date(trip.date).toLocaleDateString('fr-FR')}</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-600 mb-1"><strong>Heure :</strong></p>
-                                    <p>${trip.time} (${trip.duration})</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-600 mb-1"><strong>Véhicule :</strong></p>
-                                    <p>${trip.vehicle} <span class="text-green-600">🌱 ${trip.vehicleType}</span></p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-600 mb-1"><strong>Places :</strong></p>
-                                    <p class="font-semibold ${trip.availableSeats === 0 ? 'text-red-600' : 'text-green-600'}">
-                                        ${trip.availableSeats} / ${trip.totalSeats} disponible${trip.availableSeats > 1 ? 's' : ''}
-                                    </p>
-                                </div>
+                            <div class="trip-badge ${seatsClass}">
+                                ${trip.availableSeats} place${trip.availableSeats > 1 ? 's' : ''}
                             </div>
-                            
-                            <p class="text-gray-700 mb-4">${trip.description}</p>
                         </div>
                         
-                        <div class="lg:ml-6 lg:border-l lg:pl-6 border-gray-200">
-                            <div class="text-center mb-4">
-                                <p class="text-3xl font-bold text-green-600">${trip.price}€</p>
-                                <p class="text-gray-600 text-sm">par personne</p>
+                        <div class="trip-route">
+                            <div class="route-start">
+                                <div class="route-dot"></div>
+                                <div>
+                                    <div class="route-city">${trip.departure}</div>
+                                    <div class="route-time">${trip.time}</div>
+                                </div>
                             </div>
-                            
-                            <button onclick="contactDriver(${trip.id})" 
-                                    class="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition mb-3">
-                                📞 Contacter le chauffeur
-                            </button>
-                            
-                            <button onclick="bookTrip(${trip.id})" 
-                                    ${trip.availableSeats === 0 ? 'disabled' : ''}
-                                    class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-                                ✋ Réserver
-                            </button>
+                            <div class="route-line">
+                                <div class="route-duration">${trip.duration}</div>
+                            </div>
+                            <div class="route-end">
+                                <div class="route-dot"></div>
+                                <div>
+                                    <div class="route-city">${trip.destination}</div>
+                                    <div class="route-date">${formattedDate}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="trip-details">
+                            <div class="trip-vehicle">
+                                <span>🚗</span>
+                                <span>${trip.vehicle}</span>
+                                <span class="vehicle-type">⚡</span>
+                            </div>
+                            <p class="trip-description">${trip.description}</p>
+                        </div>
+                        
+                        <div class="trip-footer">
+                            <div class="trip-price">
+                                <span class="price-amount">${trip.price}€</span>
+                                <span class="price-label">par personne</span>
+                            </div>
+                            <div class="trip-actions">
+                                <button class="btn-detail" onclick="showTripDetails(${trip.id})">📋 Détail</button>
+                                <button class="btn-contact" onclick="contactDriver(${trip.id})">📞 Contacter</button>
+                                <button class="btn-book ${trip.availableSeats === 0 ? 'disabled' : ''}" 
+                                        onclick="bookTrip(${trip.id})" 
+                                        ${trip.availableSeats === 0 ? 'disabled' : ''}>
+                                    ✋ Réserver
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
-                tripsList.appendChild(tripCard);
-            });
+            }).join('');
         }
 
-        // Fonction pour contacter le chauffeur
+        // Trouver la date la plus proche
+        function findClosestDate(depart, date) {
+            if (!depart || !date) return null;
+            
+            const requestedDate = new Date(date);
+            const tripsForCity = availableTrips.filter(t => 
+                t.departure.toLowerCase().includes(depart.toLowerCase()) && 
+                t.availableSeats > 0
+            );
+            
+            if (tripsForCity.length === 0) return null;
+            
+            // Trier par proximité de date
+            tripsForCity.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                const diffA = Math.abs(dateA - requestedDate);
+                const diffB = Math.abs(dateB - requestedDate);
+                return diffA - diffB;
+            });
+            
+            return tripsForCity[0].date;
+        }
+
+        // Convertir durée en heures (ex: "3h" -> 3, "2h30" -> 2.5)
+        function parseDuration(duration) {
+            const match = duration.match(/(\d+)h(?:\s*(\d+)min)?/);
+            if (!match) return 0;
+            const hours = parseInt(match[1]) || 0;
+            const minutes = parseInt(match[2]) || 0;
+            return hours + (minutes / 60);
+        }
+
+        // Filtrer les trajets
+        function filterTrips() {
+            let filtered = availableTrips;
+            
+            // Filtre par type
+            if (currentFilter === 'electrique') {
+                filtered = filtered.filter(t => t.vehicleType === 'Électrique');
+            } else if (currentFilter === 'disponible') {
+                filtered = filtered.filter(t => t.availableSeats > 0);
+            }
+            
+            // Filtre par recherche
+            const depart = document.getElementById('depart').value.toLowerCase();
+            const destination = document.getElementById('destination').value.toLowerCase();
+            const date = document.getElementById('date').value;
+            
+            if (depart) {
+                filtered = filtered.filter(t => t.departure.toLowerCase().includes(depart));
+            }
+            if (destination) {
+                filtered = filtered.filter(t => t.destination.toLowerCase().includes(destination));
+            }
+            if (date) {
+                filtered = filtered.filter(t => t.date === date);
+            }
+            
+            // Filtres avancés
+            const maxPrice = parseFloat(document.getElementById('filterMaxPrice').value) || 100;
+            const maxDuration = parseFloat(document.getElementById('filterMaxDuration').value) || 10;
+            const minRating = parseFloat(document.getElementById('filterMinRating').value) || 0;
+            
+            filtered = filtered.filter(t => {
+                if (t.price > maxPrice) return false;
+                if (parseDuration(t.duration) > maxDuration) return false;
+                if (t.rating < minRating) return false;
+                return true;
+            });
+            
+            // Si aucun résultat et qu'une date est demandée, proposer date plus proche
+            if (filtered.length === 0 && date && depart) {
+                const closestDate = findClosestDate(depart, date);
+                if (closestDate) {
+                    const dateObj = new Date(closestDate);
+                    const formattedDate = dateObj.toLocaleDateString('fr-FR', { 
+                        weekday: 'long', 
+                        day: 'numeric', 
+                        month: 'long' 
+                    });
+                    document.getElementById('suggestedDate').textContent = formattedDate;
+                    document.getElementById('alternativeDate').classList.remove('hidden');
+                    window.suggestedDateValue = closestDate;
+                } else {
+                    document.getElementById('alternativeDate').classList.add('hidden');
+                }
+            } else {
+                document.getElementById('alternativeDate').classList.add('hidden');
+            }
+            
+            displayTrips(filtered);
+        }
+
+        function useSuggestedDate() {
+            if (window.suggestedDateValue) {
+                document.getElementById('date').value = window.suggestedDateValue;
+                filterTrips();
+            }
+        }
+
+        // Gestionnaires d'événements
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            filterTrips();
+        });
+
+        document.getElementById('resetButton').addEventListener('click', () => {
+            document.getElementById('depart').value = '';
+            document.getElementById('destination').value = '';
+            document.getElementById('date').value = '';
+            currentFilter = 'all';
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
+            displayTrips(availableTrips);
+        });
+
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                currentFilter = chip.dataset.filter;
+                filterTrips();
+            });
+        });
+
+        // Gestionnaires pour les filtres avancés
+        document.getElementById('filterMaxPrice').addEventListener('input', function() {
+            document.getElementById('maxPriceValue').textContent = this.value + '€';
+            filterTrips();
+        });
+
+        document.getElementById('filterMaxDuration').addEventListener('input', function() {
+            document.getElementById('maxDurationValue').textContent = this.value + 'h';
+            filterTrips();
+        });
+
+        document.getElementById('filterMinRating').addEventListener('input', function() {
+            document.getElementById('minRatingValue').textContent = this.value + '⭐';
+            filterTrips();
+        });
+
+        // Fonction pour afficher les détails d'un trajet
+        function showTripDetails(tripId) {
+            const trip = availableTrips.find(t => t.id === tripId);
+            if (!trip) return;
+            
+            window.location.href = `trip-details.html?id=${tripId}`;
+        }
+
+        // Fonctions de réservation
         function contactDriver(tripId) {
             const trip = availableTrips.find(t => t.id === tripId);
             if (trip) {
@@ -338,10 +661,6 @@
             }
         }
 
-        // Variable globale pour stocker le voyage en cours de réservation
-        let currentBookingTrip = null;
-
-        // Fonction pour réserver un covoiturage
         function bookTrip(tripId) {
             if (!userManager.isLoggedIn()) {
                 alert('Vous devez être connecté pour réserver un covoiturage.');
@@ -351,115 +670,144 @@
 
             const trip = availableTrips.find(t => t.id === tripId);
             if (trip && trip.availableSeats > 0) {
-                currentBookingTrip = trip;
-                showPaymentModal();
+                currentBooking = trip;
+                showBookingModal();
             }
         }
 
-        // Fonction pour afficher le modal de paiement
-        function showPaymentModal() {
-            if (!currentBookingTrip) return;
-
-            document.getElementById('paymentTripDetails').textContent = 
-                `${currentBookingTrip.departure} → ${currentBookingTrip.destination}`;
-            document.getElementById('paymentDriver').textContent = currentBookingTrip.driver;
-            document.getElementById('paymentAmount').textContent = `${currentBookingTrip.price}€`;
-
-            document.getElementById('paymentModal').classList.remove('hidden');
-        }
-
-        // Fonction pour cacher le modal de paiement
-        function hidePaymentModal() {
-            document.getElementById('paymentModal').classList.add('hidden');
-            currentBookingTrip = null;
-        }
-
-        // Fonction pour traiter le paiement
-        function processPayment() {
-            if (!currentBookingTrip) return;
-
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        function showBookingModal() {
+            if (!currentBooking) return;
             
-            // Simuler le processus de paiement
-            setTimeout(() => {
-                // Créer la réservation dans le système
-                const user = userManager.getCurrentUser();
+            const dateObj = new Date(currentBooking.date);
+            const formattedDate = dateObj.toLocaleDateString('fr-FR', { 
+                weekday: 'long', 
+                day: 'numeric', 
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            document.getElementById('bookingSummary').innerHTML = `
+                <div class="summary-item">
+                    <span>Trajet</span>
+                    <strong>${currentBooking.departure} → ${currentBooking.destination}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Chauffeur</span>
+                    <strong>${currentBooking.driver}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Date</span>
+                    <strong>${formattedDate} à ${currentBooking.time}</strong>
+                </div>
+                <div class="summary-item">
+                    <span>Véhicule</span>
+                    <strong>${currentBooking.vehicle}</strong>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <strong>${currentBooking.price}€</strong>
+                </div>
+            `;
+            
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+            currentBooking = null;
+        }
+
+        // Double confirmation pour la réservation
+        let firstConfirmation = false;
+
+        function confirmBooking() {
+            if (!currentBooking) return;
+            
+            const user = userManager.getCurrentUser();
+            
+            // Vérifier les crédits
+            const userCredits = user.credits || 20;
+            const totalCost = currentBooking.price + 2; // Prix + 2 crédits plateforme
+            
+            if (userCredits < totalCost) {
+                alert(`❌ Crédits insuffisants !\n\nVous avez : ${userCredits} crédits\nNécessaire : ${totalCost} crédits (${currentBooking.price}€ + 2 crédits plateforme)\n\nVeuillez recharger vos crédits.`);
+                closeBookingModal();
+                return;
+            }
+            
+            // Première confirmation
+            if (!firstConfirmation) {
+                firstConfirmation = true;
+                const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+                const confirmMsg = `⚠️ CONFIRMATION REQUISE\n\nVous allez utiliser ${totalCost} crédits pour ce trajet :\n- ${currentBooking.price}€ pour le trajet\n- 2 crédits pour la plateforme\n\nVotre solde après : ${userCredits - totalCost} crédits\n\nÊtes-vous sûr de vouloir confirmer ?`;
+                
+                if (!confirm(confirmMsg)) {
+                    firstConfirmation = false;
+                    return;
+                }
+                
+                // Deuxième confirmation
+                if (!confirm('🔒 DOUBLE CONFIRMATION\n\nConfirmez une dernière fois votre réservation.')) {
+                    firstConfirmation = false;
+                    return;
+                }
+                
+                // Créer la réservation
                 const reservation = {
                     id: Date.now(),
-                    tripId: currentBookingTrip.id,
+                    tripId: currentBooking.id,
                     userId: user.id,
-                    driver: currentBookingTrip.driver,
-                    departure: currentBookingTrip.departure,
-                    destination: currentBookingTrip.destination,
-                    date: currentBookingTrip.date,
-                    price: currentBookingTrip.price,
+                    driver: currentBooking.driver,
+                    departure: currentBooking.departure,
+                    destination: currentBooking.destination,
+                    date: currentBooking.date,
+                    price: currentBooking.price,
+                    platformFee: 2,
+                    totalCost: totalCost,
                     paymentMethod: paymentMethod,
                     status: 'confirmed',
                     createdAt: new Date().toISOString()
                 };
 
                 // Sauvegarder la réservation
-                saveReservation(reservation);
+                let reservations = JSON.parse(localStorage.getItem('ecoride_reservations') || '[]');
+                reservations.push(reservation);
+                localStorage.setItem('ecoride_reservations', JSON.stringify(reservations));
 
-                // Cacher le modal
-                hidePaymentModal();
+                // Mettre à jour les crédits
+                user.credits = userCredits - totalCost;
+                userManager.updateUser(user);
+                localStorage.setItem('ecoride_current_user', JSON.stringify(user));
 
-                // Afficher le message de succès
-                alert(`✅ Réservation confirmée !\n\nTrajet: ${currentBookingTrip.departure} → ${currentBookingTrip.destination}\nChauffeur: ${currentBookingTrip.driver}\nPrix: ${currentBookingTrip.price}€\n\nMerci pour votre confiance !`);
+                // Mettre à jour les places disponibles
+                const trip = availableTrips.find(t => t.id === currentBooking.id);
+                if (trip) {
+                    trip.availableSeats--;
+                }
 
-                // Rediriger vers le dashboard
+                closeBookingModal();
+                firstConfirmation = false;
+                
+                alert(`✅ Réservation confirmée !\n\nTrajet: ${currentBooking.departure} → ${currentBooking.destination}\nChauffeur: ${currentBooking.driver}\nPrix: ${currentBooking.price}€\nFrais plateforme: 2 crédits\nTotal: ${totalCost} crédits\nNouveau solde: ${user.credits} crédits\n\nMerci pour votre confiance !`);
                 window.location.href = 'dashboard.html';
-            }, 500);
+            }
         }
 
-        // Fonction pour sauvegarder une réservation
-        function saveReservation(reservation) {
-            let reservations = JSON.parse(localStorage.getItem('ecoride_reservations') || '[]');
-            reservations.push(reservation);
-            localStorage.setItem('ecoride_reservations', JSON.stringify(reservations));
-        }
-
-        // Gestion des filtres
-        document.getElementById('filterForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const depart = document.getElementById('filterDepart').value.toLowerCase();
-            const destination = document.getElementById('filterDestination').value.toLowerCase();
-            const date = document.getElementById('filterDate').value;
-
-            let filteredTrips = availableTrips;
-
-            if (depart) {
-                filteredTrips = filteredTrips.filter(t => t.departure.toLowerCase().includes(depart));
+        // Fermer modal en cliquant en dehors
+        document.getElementById('bookingModal').addEventListener('click', (e) => {
+            if (e.target.id === 'bookingModal') {
+                closeBookingModal();
             }
-
-            if (destination) {
-                filteredTrips = filteredTrips.filter(t => t.destination.toLowerCase().includes(destination));
-            }
-
-            if (date) {
-                filteredTrips = filteredTrips.filter(t => t.date === date);
-            }
-
-            // Trier les résultats filtrés par date (du plus récent au plus ancien)
-            filteredTrips = sortTripsByDate(filteredTrips);
-            displayTrips(filteredTrips);
-        });
-
-        // Reset filters
-        document.getElementById('resetFilters').addEventListener('click', function() {
-            document.getElementById('filterForm').reset();
-            displayTrips(availableTrips);
         });
 
         // Initialisation
         displayTrips(availableTrips);
-
+        
         // Exporter les fonctions
         window.contactDriver = contactDriver;
         window.bookTrip = bookTrip;
-        window.showPaymentModal = showPaymentModal;
-        window.hidePaymentModal = hidePaymentModal;
-        window.processPayment = processPayment;
+        window.closeBookingModal = closeBookingModal;
+        window.confirmBooking = confirmBooking;
     </script>
 </body>
 </html>

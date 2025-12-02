@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="css/home.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>EcoRide - Contact</title>
 </head>
 <body>
@@ -20,52 +20,157 @@
         </ul>
     </nav>
 
-    <main class="min-h-screen bg-gray-50 py-12">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-green-700 mb-4">📧 Contactez-nous</h1>
-                <p class="text-gray-600">Une question ? Notre équipe est là pour vous aider</p>
+    <div class="contact-hero">
+        <h1>📧 Contactez-nous</h1>
+        <p>Une question ? Notre équipe est là pour vous aider</p>
+    </div>
+
+    <div class="contact-container">
+        <div class="contact-grid">
+            <div class="contact-card">
+                <span class="contact-icon">📧</span>
+                <h3>Email</h3>
+                <p><a href="mailto:contact@ecoride.fr" class="contact-link">contact@ecoride.fr</a></p>
             </div>
-
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h3 class="font-semibold mb-2">📧 Email</h3>
-                        <p class="text-gray-600">contact@ecoride.fr</p>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold mb-2">📞 Téléphone</h3>
-                        <p class="text-gray-600">01 23 45 67 89</p>
-                    </div>
-                </div>
-
-                <form id="contactForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Email *</label>
-                        <input type="email" required class="w-full border rounded-md px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Sujet *</label>
-                        <input type="text" required class="w-full border rounded-md px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Message *</label>
-                        <textarea rows="5" required class="w-full border rounded-md px-3 py-2"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">
-                        Envoyer
-                    </button>
-                </form>
+            
+            <div class="contact-card">
+                <span class="contact-icon">📞</span>
+                <h3>Téléphone</h3>
+                <p><a href="tel:+33123456789" class="contact-link">01 23 45 67 89</a></p>
+            </div>
+            
+            <div class="contact-card">
+                <span class="contact-icon">📍</span>
+                <h3>Adresse</h3>
+                <p>123 Avenue Écologique<br>75001 Paris, France</p>
             </div>
         </div>
-    </main>
 
+        <div class="contact-form-card">
+            <h2>Envoyez-nous un message</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="votre.email@exemple.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">Nom complet</label>
+                    <input type="text" id="name" name="name" placeholder="Votre nom">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Sujet <span class="required">*</span></label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Sélectionnez un sujet</option>
+                        <option value="question">Question générale</option>
+                        <option value="reservation">Problème de réservation</option>
+                        <option value="compte">Problème de compte</option>
+                        <option value="paiement">Question de paiement</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message <span class="required">*</span></label>
+                    <textarea id="message" name="message" required placeholder="Écrivez votre message ici..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <span>📤</span>
+                    Envoyer le message
+                </button>
+            </form>
+            
+            <div id="successMessage" class="success-message">
+                <div class="success-icon">✅</div>
+                <h3>Message envoyé avec succès !</h3>
+                <p>Nous vous répondrons dans les plus brefs délais.</p>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <h2>📍 Nous trouver</h2>
+            <div class="map-placeholder">
+                <div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                    <div>123 Avenue Écologique<br>75001 Paris, France</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/userManager.js"></script>
+    <script src="js/apiClient.js"></script>
     <script src="js/navbar.js"></script>
     <script>
+        // Récupérer les paramètres de l'URL si on vient de la page covoiturage
+        const urlParams = new URLSearchParams(window.location.search);
+        const tripId = urlParams.get('trip');
+        const driverName = urlParams.get('driver');
+
+        // Si on vient d'un covoiturage, pré-remplir le formulaire
+        if (driverName) {
+            document.getElementById('subject').value = 'question';
+            document.getElementById('message').value = `Bonjour,\n\nJe souhaite contacter le chauffeur ${decodeURIComponent(driverName)} concernant le trajet #${tripId}.\n\n`;
+        }
+
+        // Gestion du formulaire
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Message envoyé ! (Mode démo)');
+            
+            // Récupérer les valeurs
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Validation
+            if (!email || !subject || !message) {
+                alert('Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+            
+            // Simuler l'envoi (mode démo)
+            console.log('Message envoyé:', { email, name, subject, message });
+            
+            // Afficher le message de succès
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('active');
+            
+            // Réinitialiser le formulaire
             this.reset();
+            
+            // Masquer le message après 5 secondes
+            setTimeout(() => {
+                successMessage.classList.remove('active');
+            }, 5000);
+            
+            // Scroll vers le message de succès
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer les cartes de contact
+        document.querySelectorAll('.contact-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
         });
     </script>
 </body>
