@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=ecoride
+      - DB_USER=ecoride_user
+      - DB_PASS=ecoride_password
+    networks:
+      - ecoride-network
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=ecoride
+      - MYSQL_USER=ecoride_user
+      - MYSQL_PASSWORD=ecoride_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/ecoride.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - ecoride-network
+
+volumes:
+  db_data:
+
+networks:
+  ecoride-network:
+    driver: bridge
+

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>EcoRide - Espace Employé</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <!-- La navbar sera mise à jour dynamiquement par navbar.js -->
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="covoiurage-disponibles.html">Accès aux covoiturages</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+        </ul>
+    </nav>
+
+    <main class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- En-tête employé -->
+            <div class="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg shadow-md p-6 mb-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold" id="employeeName">Bonjour, Employé !</h1>
+                        <p class="text-blue-100 mt-2">Espace de modération et gestion des avis</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-4xl font-bold">👨‍💼</div>
+                        <div class="text-sm text-blue-100">Employé</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Avis en attente</p>
+                            <p class="text-3xl font-bold text-yellow-600" id="pendingReviews">0</p>
+                        </div>
+                        <div class="text-4xl">⭐</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Avis modérés aujourd'hui</p>
+                            <p class="text-3xl font-bold text-green-600" id="moderatedToday">0</p>
+                        </div>
+                        <div class="text-4xl">✅</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total modéré</p>
+                            <p class="text-3xl font-bold text-blue-600" id="totalModerated">0</p>
+                        </div>
+                        <div class="text-4xl">📊</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation par onglets -->
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8 px-6">
+                        <button id="tab-reviews" onclick="showTab('reviews')" class="tab-button border-b-2 border-blue-500 text-blue-600 py-4 px-1 text-sm font-medium">
+                            ⭐ Modération des avis
+                        </button>
+                        <button id="tab-stats" onclick="showTab('stats')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            📊 Statistiques
+                        </button>
+                        <button id="tab-profile" onclick="showTab('profile')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            👤 Mon Profil
+                        </button>
+                    </nav>
+                </div>
+                
+                <!-- Contenu des onglets -->
+                <div class="p-6">
+                    
+                    <!-- Onglet Modération des avis -->
+                    <div id="content-reviews" class="tab-content">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Modération des avis</h2>
+                            <div class="flex space-x-2">
+                                <select id="filterReviews" onchange="filterReviews()" class="border border-gray-300 rounded-md px-3 py-2">
+                                    <option value="all">Tous les avis</option>
+                                    <option value="pending">En attente</option>
+                                    <option value="approved">Approuvés</option>
+                                    <option value="rejected">Rejetés</option>
+                                </select>
+                                <button onclick="refreshReviews()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                    🔄 Actualiser
+                                </button>
+                            </div>
+                        </div>
+                        <div id="reviewsList" class="space-y-4">
+                            <p class="text-gray-500">Chargement des avis...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Statistiques -->
+                    <div id="content-stats" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Statistiques de modération</h2>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3">Avis modérés par jour</h3>
+                                <canvas id="reviewsChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3">Répartition des décisions</h3>
+                                <canvas id="decisionsChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-blue-800 mb-2">📈 Activité récente</h3>
+                            <div id="recentActivity" class="space-y-2">
+                                <p class="text-sm text-gray-600">Aucune activité récente</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Profil -->
+                    <div id="content-profile" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Mon Profil Employé</h2>
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pseudo</label>
+                                    <input type="text" id="employeePseudo" class="border border-gray-300 rounded-md px-3 py-2 w-full" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <input type="email" id="employeeEmail" class="border border-gray-300 rounded-md px-3 py-2 w-full" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Rôle</label>
+                                    <input type="text" value="Employé" class="border border-gray-300 rounded-md px-3 py-2 w-full bg-gray-100" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de modération d'avis -->
+    <div id="reviewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Modérer l'avis</h3>
+                <div id="reviewModalContent" class="space-y-4">
+                    <!-- Contenu de l'avis à modérer -->
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button onclick="hideReviewModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                        Annuler
+                    </button>
+                    <button onclick="rejectReview()" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                        ❌ Rejeter
+                    </button>
+                    <button onclick="approveReview()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                        ✅ Approuver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/userManager.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/employee-dashboard.js"></script>
+</body>
+</html>
+

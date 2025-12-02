@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <title>EcoRide - Covoiturage Écologique</title>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo EcoRide">
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="covoiurage-disponibles.html">Accès aux covoiturages</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+            <li><a href="#" onclick="logout(); return false;">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">EcoRide <span class="emoji">🌿</span></h1>
+            <p class="hero-subtitle">Le covoiturage écologique, simple et responsable</p>
+            <p class="hero-description">Rejoignez une communauté engagée pour réduire votre empreinte carbone tout en économisant sur vos trajets</p>
+            
+            <!-- Statistiques -->
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Utilisateurs</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">Trajets réalisés</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200T</div>
+                    <div class="stat-label">CO₂ économisé</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulaire de recherche -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <h2 class="search-title">🚗 Trouvez votre covoiturage idéal</h2>
+                <form id="searchForm" class="search-form">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <span class="input-icon">📍</span>
+                            <input type="text" name="depart" id="depart" placeholder="Ville de départ" required>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">🎯</span>
+                            <input type="text" name="destination" id="destination" placeholder="Ville d'arrivée" required>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">📅</span>
+                            <input type="date" name="date" id="date" required>
+                        </div>
+                        <button type="submit" class="btn-search">
+                            <span>🔍</span>
+                            <span>Rechercher</span>
+                        </button>
+                        <button type="button" id="resetButton" class="btn-reset">🔄</button>
+                    </div>
+                </form>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Avantages -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Pourquoi choisir EcoRide ?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3 class="feature-title">Écologique</h3>
+                    <p class="feature-text">Réduisez votre empreinte carbone en partageant vos trajets</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Économique</h3>
+                    <p class="feature-text">Partagez les frais de route et économisez sur vos déplacements</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3 class="feature-title">Communautaire</h3>
+                    <p class="feature-text">Rencontrez des personnes partageant les mêmes valeurs</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Rapide</h3>
+                    <p class="feature-text">Réservation simple et trajets optimisés</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Sécurisé</h3>
+                    <p class="feature-text">Profils vérifiés et système de notation fiable</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Simple</h3>
+                    <p class="feature-text">Interface intuitive accessible à tous</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Présentation -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">Qui sommes-nous ?</h2>
+                    <p class="about-description">
+                        EcoRide est une startup française engagée pour un avenir plus vert 🌍.
+                    </p>
+                    <p class="about-description">
+                        Notre mission : réduire l'impact environnemental des trajets en voiture tout en facilitant la rencontre entre conducteurs et passagers. Nous croyons qu'ensemble, nous pouvons faire la différence pour notre planète.
+                    </p>
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <div class="about-stat-value">2019</div>
+                            <div class="about-stat-label">Année de création</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-value">15+</div>
+                            <div class="about-stat-label">Villes desservies</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-value">4.8/5</div>
+                            <div class="about-stat-label">Note moyenne</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" alt="Voiture écologique sur la route">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Avis -->
+    <section class="reviews">
+        <div class="container">
+            <h2 class="section-title">⭐ Avis de nos clients</h2>
+            <p class="section-subtitle">Découvrez ce que nos utilisateurs disent de notre service de covoiturage</p>
+            <div id="reviewsList" class="reviews-grid"></div>
+        </div>
+    </section>
+
+    <!-- Section CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">Prêt à commencer ?</h2>
+            <p class="cta-description">Rejoignez la communauté EcoRide et commencez à économiser tout en protégeant la planète</p>
+            <div class="cta-buttons">
+                <a href="register.html" class="btn btn-primary">Créer un compte</a>
+                <a href="login.html" class="btn btn-secondary">Se connecter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h3 class="footer-title">EcoRide 🌿</h3>
+                    <p class="footer-text">Le covoiturage écologique pour un avenir meilleur</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-subtitle">Liens rapides</h4>
+                    <ul class="footer-links">
+                        <li><a href="home.html">Accueil</a></li>
+                        <li><a href="covoiurage-disponibles.html">Covoiturages</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-subtitle">Contact</h4>
+                    <p class="footer-text">📧 contact@ecoride.fr</p>
+                    <p class="footer-text">📞 +33 1 23 45 67 89</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-subtitle">Suivez-nous</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘 Facebook</a>
+                        <a href="#" class="social-link">🐦 Twitter</a>
+                        <a href="#" class="social-link">📷 Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EcoRide. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/userManager.js"></script>
+    <script src="js/apiClient.js"></script>
+    <script src="js/tripManager.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/realtime.js"></script>
+    <script src="js/script.js"></script>
+    
+    <script>
+        // Avis de démonstration par défaut
+        const defaultReviews = [
+            {
+                name: 'Marie Dubois',
+                rating: 5,
+                comment: 'Service exceptionnel ! Les trajets sont à l\'heure et les chauffeurs très sympathiques.',
+                date: '2025-01-15',
+                trip: 'Paris → Lyon'
+            },
+            {
+                name: 'Jean Martin',
+                rating: 5,
+                comment: 'Excellente plateforme ! J\'ai économisé beaucoup d\'argent et rencontré des personnes intéressantes.',
+                date: '2025-01-10',
+                trip: 'Lyon → Marseille'
+            },
+            {
+                name: 'Sophie Laurent',
+                rating: 4,
+                comment: 'Très pratique pour mes trajets réguliers. Interface intuitive et réservation simple.',
+                date: '2025-01-08',
+                trip: 'Bordeaux → Paris'
+            },
+            {
+                name: 'Pierre Lefebvre',
+                rating: 5,
+                comment: 'EcoRide a changé mes habitudes de déplacement. Je recommande vivement !',
+                date: '2025-01-05',
+                trip: 'Paris → Strasbourg'
+            },
+            {
+                name: 'Catherine Moreau',
+                rating: 4,
+                comment: 'Service de covoiturage écologique et économique. Super expérience !',
+                date: '2025-01-03',
+                trip: 'Nice → Marseille'
+            },
+            {
+                name: 'Thomas Bernard',
+                rating: 5,
+                comment: 'Très bon service, conducteurs ponctuels et véhicules propres. À refaire !',
+                date: '2025-01-01',
+                trip: 'Nantes → Paris'
+            }
+        ];
+
+        // Fonction pour récupérer les avis validés
+        function getValidatedReviews() {
+            try {
+                const reviews = localStorage.getItem('ecoride_reviews');
+                if (!reviews) return [];
+                const parsedReviews = JSON.parse(reviews);
+                return parsedReviews.filter(review => review.statut === 'validé');
+            } catch (error) {
+                console.error('Erreur lors de la récupération des avis:', error);
+                return [];
+            }
+        }
+
+        // Fonction pour générer les étoiles
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += i <= rating ? '⭐' : '☆';
+            }
+            return stars;
+        }
+
+        // Fonction pour afficher les avis
+        function displayReviews() {
+            const reviewsList = document.getElementById('reviewsList');
+            if (!reviewsList) return;
+            
+            reviewsList.innerHTML = '';
+            
+            const validatedReviews = getValidatedReviews();
+            const reviewsToDisplay = validatedReviews.map(review => ({
+                name: review.passager,
+                rating: review.note,
+                comment: review.commentaire,
+                date: review.date,
+                trip: `Covoiturage #${review.tripId || 'N/A'}`
+            }));
+            
+            const reviews = reviewsToDisplay.length > 0 ? reviewsToDisplay : defaultReviews;
+            const reviewsToShow = reviews.slice(0, 6);
+            
+            reviewsToShow.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                
+                const formattedDate = new Date(review.date).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                reviewCard.innerHTML = `
+                    <div class="review-header">
+                        <div class="review-author">
+                            <div class="review-avatar">${review.name.charAt(0)}</div>
+                            <div>
+                                <h3 class="review-name">${review.name}</h3>
+                                <p class="review-date">${formattedDate}</p>
+                            </div>
+                        </div>
+                        <div class="review-stars">${generateStars(review.rating)}</div>
+                    </div>
+                    <div class="review-trip">
+                        <span class="trip-icon">📍</span>
+                        <span class="trip-text">${review.trip}</span>
+                    </div>
+                    <p class="review-comment">${review.comment}</p>
+                    <div class="review-footer">
+                        <span class="review-verified">✅ Avis vérifié</span>
+                    </div>
+                `;
+                
+                reviewsList.appendChild(reviewCard);
+            });
+        }
+
+        // Fonction de déconnexion
+        function logout(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            localStorage.clear();
+            if (typeof userManager !== 'undefined') {
+                userManager.currentUser = null;
+            }
+            if (typeof apiClient !== 'undefined') {
+                apiClient.currentUser = null;
+                apiClient.logout().catch(err => console.error('Erreur lors de la déconnexion:', err));
+            }
+            window.location.replace('login.html?logout=1');
+            return false;
+        }
+        
+        window.logout = logout;
+        
+        // Afficher les avis au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            displayReviews();
+        });
+    </script>
+</body>
+</html>

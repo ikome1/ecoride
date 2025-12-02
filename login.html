@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EcoRide - Connexion</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+        </ul>
+    </nav>
+
+    <main class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    Connexion à EcoRide
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    Connectez-vous pour participer aux covoiturages
+                </p>
+            </div>
+            
+            <form id="loginForm" class="mt-8 space-y-6">
+                <div class="rounded-md shadow-sm -space-y-px">
+                    <div>
+                        <label for="pseudo" class="sr-only">Pseudo</label>
+                        <input id="pseudo" name="pseudo" type="text" required 
+                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm" 
+                               placeholder="Pseudo">
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Mot de passe</label>
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm" 
+                               placeholder="Mot de passe">
+                    </div>
+                </div>
+
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+                    <!-- Messages d'erreur -->
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Se connecter
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Pas encore de compte ? 
+                        <a href="register.html" class="font-medium text-green-600 hover:text-green-500">
+                            Créer un compte
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Comptes de démonstration -->
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <h4 class="text-blue-700 font-semibold mb-2">Comptes de démonstration :</h4>
+                    <div class="text-xs text-blue-600 space-y-1">
+                        <p><strong>Utilisateur :</strong> user / user123</p>
+                        <p><strong>Employés :</strong> employe1 à employe5 / employe123</p>
+                        <p><strong>Admin :</strong> admin / admin123</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/userManager.js"></script>
+    <script src="js/navbar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Nettoyer le localStorage si nécessaire (pour débogage)
+            // Décommenter la ligne suivante pour forcer le nettoyage :
+            // localStorage.removeItem('ecoride_current_user');
+            
+            // Vérifier les données dans localStorage
+            const storedUser = localStorage.getItem('ecoride_current_user');
+            if (storedUser) {
+                try {
+                    const user = JSON.parse(storedUser);
+                    console.log('Login: Utilisateur trouvé dans localStorage au chargement:', user.pseudo, 'Rôle:', user.role);
+                } catch (error) {
+                    console.error('Login: Erreur parsing localStorage:', error);
+                }
+            }
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const pseudo = document.getElementById('pseudo').value;
+                const password = document.getElementById('password').value;
+                
+                console.log('=== LOGIN FORM: DÉBUT ===');
+                console.log('Login: Pseudo saisi:', pseudo);
+                console.log('Login: Password saisi:', password ? '***' : 'VIDE');
+                console.log('Login: userManager existe?', typeof userManager !== 'undefined');
+                console.log('Login: userManager.users.length:', userManager ? userManager.users.length : 'N/A');
+                console.log('Login: userManager.employees.length:', userManager ? userManager.employees.length : 'N/A');
+                console.log('Login: userManager.admins.length:', userManager ? userManager.admins.length : 'N/A');
+                
+                try {
+                    console.log('=== LOGIN: DÉBUT ===');
+                    console.log('Login: Pseudo:', pseudo);
+                    console.log('Login: userManager.users avant:', userManager.users.length);
+                    
+                    const result = userManager.login(pseudo, password);
+                    console.log('Login result:', result);
+                    
+                    if (result.success) {
+                        console.log('=== LOGIN: SUCCÈS ===');
+                        const user = result.user;
+                        console.log('Login: Utilisateur complet:', JSON.stringify(user, null, 2));
+                        console.log('Login: Rôle brut:', user.role);
+                        console.log('Login: Type de rôle:', typeof user.role);
+                        console.log('Login: Pseudo:', user.pseudo);
+                        
+                        // Vérifier le localStorage pour confirmer
+                        const stored = localStorage.getItem('ecoride_current_user');
+                        if (stored) {
+                            const storedUser = JSON.parse(stored);
+                            console.log('Login: Rôle dans localStorage:', storedUser.role);
+                        }
+                        
+                        // Déterminer l'URL de redirection selon le rôle IMMÉDIATEMENT
+                        let redirectUrl = 'dashboard.html';
+                        const role = String(user.role || '').toLowerCase().trim();
+                        
+                        console.log('Login: Rôle normalisé:', role);
+                        console.log('Login: Comparaison role === "employee":', role === 'employee');
+                        console.log('Login: Comparaison role === "admin":', role === 'admin');
+                        
+                        if (role === 'employee' || role === 'employe' || role === 'employé') {
+                            redirectUrl = 'employee-dashboard.html';
+                            console.log('Login: ✅✅✅ REDIRECTION VERS employee-dashboard.html ✅✅✅');
+                        } else if (role === 'admin' || role === 'administrator') {
+                            redirectUrl = 'admin-dashboard.html';
+                            console.log('Login: ✅✅✅ REDIRECTION VERS admin-dashboard.html ✅✅✅');
+                        } else {
+                            redirectUrl = 'dashboard.html';
+                            console.log('Login: ✅ Redirection vers dashboard.html (utilisateur normal)');
+                        }
+                        
+                        console.log('Login: URL de redirection finale:', redirectUrl);
+                        console.log('Login: Redirection IMMÉDIATE avec window.location.replace...');
+                        
+                        // Rediriger IMMÉDIATEMENT sans attendre
+                        window.location.replace(redirectUrl);
+                    } else {
+                        console.log('Échec de connexion:', result.message);
+                        showError(result.message);
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la connexion:', error);
+                    showError(error.message);
+                }
+            });
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

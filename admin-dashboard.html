@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>EcoRide - Administration</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <!-- La navbar sera mise à jour dynamiquement par navbar.js -->
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="covoiurage-disponibles.html">Accès aux covoiturages</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+        </ul>
+    </nav>
+
+    <main class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- En-tête admin -->
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-md p-6 mb-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold" id="adminName">Bonjour, Administrateur !</h1>
+                        <p class="text-purple-100 mt-2">Panneau d'administration de la plateforme EcoRide</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-4xl font-bold">👑</div>
+                        <div class="text-sm text-purple-100">Administrateur</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques globales -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Utilisateurs totaux</p>
+                            <p class="text-3xl font-bold text-blue-600" id="totalUsers">0</p>
+                        </div>
+                        <div class="text-4xl">👥</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Covoiturages actifs</p>
+                            <p class="text-3xl font-bold text-green-600" id="activeTrips">0</p>
+                        </div>
+                        <div class="text-4xl">🚗</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Crédits en circulation</p>
+                            <p class="text-3xl font-bold text-orange-600" id="totalCredits">0</p>
+                        </div>
+                        <div class="text-4xl">💰</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Avis en attente</p>
+                            <p class="text-3xl font-bold text-red-600" id="pendingReviews">0</p>
+                        </div>
+                        <div class="text-4xl">⭐</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation par onglets -->
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8 px-6">
+                        <button id="tab-overview" onclick="showTab('overview')" class="tab-button border-b-2 border-purple-500 text-purple-600 py-4 px-1 text-sm font-medium">
+                            📊 Vue d'ensemble
+                        </button>
+                        <button id="tab-users" onclick="showTab('users')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            👥 Gestion des utilisateurs
+                        </button>
+                        <button id="tab-trips" onclick="showTab('trips')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            🗺️ Gestion des trajets
+                        </button>
+                        <button id="tab-reviews" onclick="showTab('reviews')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            ⭐ Modération des avis
+                        </button>
+                        <button id="tab-settings" onclick="showTab('settings')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            ⚙️ Paramètres
+                        </button>
+                    </nav>
+                </div>
+                
+                <!-- Contenu des onglets -->
+                <div class="p-6">
+                    
+                    <!-- Onglet Vue d'ensemble -->
+                    <div id="content-overview" class="tab-content">
+                        <h2 class="text-xl font-bold mb-4">Vue d'ensemble de la plateforme</h2>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3">Évolution des utilisateurs</h3>
+                                <canvas id="usersChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3">Évolution des trajets</h3>
+                                <canvas id="tripsChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-blue-800 mb-2">📈 Activité récente</h3>
+                            <div id="recentActivity" class="space-y-2">
+                                <p class="text-sm text-gray-600">Chargement des activités...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Gestion des utilisateurs -->
+                    <div id="content-users" class="tab-content hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Gestion des utilisateurs</h2>
+                            <div class="flex space-x-2">
+                                <input type="text" id="searchUsers" placeholder="Rechercher un utilisateur..." class="border border-gray-300 rounded-md px-3 py-2">
+                                <button onclick="refreshUsers()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                    🔄 Actualiser
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pseudo</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rôle</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Crédits</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody" class="divide-y divide-gray-200">
+                                    <tr>
+                                        <td colspan="6" class="px-4 py-4 text-center text-gray-500">Chargement des utilisateurs...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Gestion des trajets -->
+                    <div id="content-trips" class="tab-content hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Gestion des trajets</h2>
+                            <button onclick="refreshTrips()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                🔄 Actualiser
+                            </button>
+                        </div>
+                        <div id="adminTripsList" class="space-y-4">
+                            <p class="text-gray-500">Chargement des trajets...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Modération des avis -->
+                    <div id="content-reviews" class="tab-content hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Modération des avis</h2>
+                            <button onclick="refreshReviews()" class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700">
+                                🔄 Actualiser
+                            </button>
+                        </div>
+                        <div id="reviewsList" class="space-y-4">
+                            <p class="text-gray-500">Chargement des avis...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Paramètres -->
+                    <div id="content-settings" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Paramètres de la plateforme</h2>
+                        <div class="space-y-6">
+                            <div class="bg-white border border-gray-200 rounded-lg p-6">
+                                <h3 class="font-semibold mb-4">Paramètres généraux</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Crédits initiaux pour nouveaux utilisateurs</label>
+                                        <input type="number" id="initialCredits" value="20" min="0" class="border border-gray-300 rounded-md px-3 py-2">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Prix minimum d'un trajet (crédits)</label>
+                                        <input type="number" id="minTripPrice" value="3" min="1" class="border border-gray-300 rounded-md px-3 py-2">
+                                    </div>
+                                    <button onclick="saveSettings()" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">
+                                        💾 Sauvegarder les paramètres
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-6">
+                                <h3 class="font-semibold mb-4">Mon profil administrateur</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Pseudo</label>
+                                        <input type="text" id="adminPseudo" class="border border-gray-300 rounded-md px-3 py-2" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                        <input type="email" id="adminEmail" class="border border-gray-300 rounded-md px-3 py-2" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/userManager.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
+

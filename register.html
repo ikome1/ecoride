@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EcoRide - Créer un compte</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+        </ul>
+    </nav>
+
+    <main class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    Créer un compte EcoRide
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    Rejoignez la communauté écologique
+                </p>
+            </div>
+            
+            <form id="registerForm" class="mt-8 space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <label for="pseudo" class="block text-sm font-medium text-gray-700">Pseudo</label>
+                        <input id="pseudo" name="pseudo" type="text" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" 
+                               placeholder="Votre pseudo">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input id="email" name="email" type="email" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" 
+                               placeholder="votre@email.com">
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                        <input id="password" name="password" type="password" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" 
+                               placeholder="Mot de passe sécurisé">
+                        <p class="mt-1 text-xs text-gray-500">
+                            Au moins 8 caractères, une majuscule, une minuscule et un chiffre
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
+                        <input id="confirmPassword" name="confirmPassword" type="password" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" 
+                               placeholder="Confirmez votre mot de passe">
+                    </div>
+                </div>
+
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
+                    <!-- Messages d'erreur -->
+                </div>
+
+                <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded">
+                    <!-- Messages de succès -->
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Créer mon compte
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Déjà un compte ? 
+                        <a href="login.html" class="font-medium text-green-600 hover:text-green-500">
+                            Se connecter
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Avantages du compte -->
+                <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <h4 class="text-green-700 font-semibold mb-2">🎁 Avantages de votre compte :</h4>
+                    <ul class="text-xs text-green-600 space-y-1">
+                        <li>• 20 crédits offerts à la création</li>
+                        <li>• Participation aux covoiturages</li>
+                        <li>• Possibilité de devenir chauffeur</li>
+                        <li>• Historique de vos trajets</li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/userManager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const pseudo = document.getElementById('pseudo').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                console.log('Tentative de création de compte:', { pseudo, email });
+                
+                // Validation des champs vides
+                if (!pseudo || !email || !password || !confirmPassword) {
+                    showError('Tous les champs sont obligatoires');
+                    return;
+                }
+                
+                // Validation des mots de passe
+                if (password !== confirmPassword) {
+                    showError('Les mots de passe ne correspondent pas');
+                    return;
+                }
+                
+                // Validation de la sécurité du mot de passe
+                if (!userManager.isPasswordSecure(password)) {
+                    showError('Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
+                    return;
+                }
+                
+                try {
+                    console.log('Création du compte en cours...');
+                    const user = userManager.createAccount(pseudo, email, password);
+                    console.log('Compte créé avec succès:', user);
+                    
+                    showSuccess('Compte créé avec succès ! Vous allez être redirigé vers la connexion.');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Erreur lors de la création:', error);
+                    showError(error.message);
+                }
+            });
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+            }
+            
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+{
+  "covoiturages": [
+    {
+      "id": 1,
+      "conducteur": {
+        "nom": "Jean Dupont",
+        "photo": "images/dupont.jpeg",
+        "note": 4.8,
+        "telephone": "06 12 34 56 78",
+        "email": "jean.dupont@email.com"
+      },
+      "trajet": {
+        "depart": "Paris",
+        "destination": "Lyon",
+        "adresseDepart": "Gare de Lyon, Paris",
+        "adresseArrivee": "Gare de Lyon-Perrache, Lyon",
+        "distance": "463 km",
+        "duree": "4h30"
+      },
+      "details": {
+        "date": "2025-10-20",
+        "heureDepart": "09:00",
+        "heureArrivee": "13:30",
+        "placesDisponibles": 3,
+        "prix": 15,
+        "vehicule": {
+          "marque": "Renault",
+          "modele": "Zoe",
+          "type": "Électrique",
+          "couleur": "Blanc",
+          "places": 5
+        },
+        "options": {
+          "climatisation": true,
+          "musique": true,
+          "wifi": false,
+          "bagages": true,
+          "animaux": false,
+          "fumeur": false
+        }
+      },
+      "commentaires": [
+        {
+          "passager": "Marie Martin",
+          "note": 5,
+          "commentaire": "Très bon conducteur, ponctuel et sympathique !",
+          "date": "2025-09-15"
+        },
+        {
+          "passager": "Pierre Durand",
+          "note": 4,
+          "commentaire": "Trajet confortable, je recommande.",
+          "date": "2025-09-10"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "conducteur": {
+        "nom": "Marie Martin",
+        "photo": "images/dupont.jpeg",
+        "note": 4.5,
+        "telephone": "06 23 45 67 89",
+        "email": "marie.martin@email.com"
+      },
+      "trajet": {
+        "depart": "Paris",
+        "destination": "Lyon",
+        "adresseDepart": "Châtelet, Paris",
+        "adresseArrivee": "Part-Dieu, Lyon",
+        "distance": "463 km",
+        "duree": "4h15"
+      },
+      "details": {
+        "date": "2025-10-20",
+        "heureDepart": "14:00",
+        "heureArrivee": "18:15",
+        "placesDisponibles": 2,
+        "prix": 12,
+        "vehicule": {
+          "marque": "Peugeot",
+          "modele": "208",
+          "type": "Essence",
+          "couleur": "Rouge",
+          "places": 5
+        },
+        "options": {
+          "climatisation": true,
+          "musique": true,
+          "wifi": false,
+          "bagages": true,
+          "animaux": true,
+          "fumeur": false
+        }
+      },
+      "commentaires": [
+        {
+          "passager": "Jean Dupont",
+          "note": 4,
+          "commentaire": "Conductrice agréable, trajet sans problème.",
+          "date": "2025-09-12"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "conducteur": {
+        "nom": "Pierre Durand",
+        "photo": "images/dupont.jpeg",
+        "note": 4.9,
+        "telephone": "06 34 56 78 90",
+        "email": "pierre.durand@email.com"
+      },
+      "trajet": {
+        "depart": "Paris",
+        "destination": "Lyon",
+        "adresseDepart": "Porte de Versailles, Paris",
+        "adresseArrivee": "Vaulx-en-Velin, Lyon",
+        "distance": "463 km",
+        "duree": "4h45"
+      },
+      "details": {
+        "date": "2025-10-21",
+        "heureDepart": "08:00",
+        "heureArrivee": "12:45",
+        "placesDisponibles": 1,
+        "prix": 18,
+        "vehicule": {
+          "marque": "Tesla",
+          "modele": "Model 3",
+          "type": "Électrique",
+          "couleur": "Noir",
+          "places": 5
+        },
+        "options": {
+          "climatisation": true,
+          "musique": true,
+          "wifi": true,
+          "bagages": true,
+          "animaux": false,
+          "fumeur": false
+        }
+      },
+      "commentaires": [
+        {
+          "passager": "Sophie Bernard",
+          "note": 5,
+          "commentaire": "Excellent conducteur, voiture de luxe !",
+          "date": "2025-09-20"
+        },
+        {
+          "passager": "Thomas Petit",
+          "note": 5,
+          "commentaire": "Service premium, je recommande vivement.",
+          "date": "2025-09-18"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "conducteur": {
+        "nom": "Sophie Bernard",
+        "photo": "images/dupont.jpeg",
+        "note": 4.7,
+        "telephone": "06 45 67 89 01",
+        "email": "sophie.bernard@email.com"
+      },
+      "trajet": {
+        "depart": "Lyon",
+        "destination": "Paris",
+        "adresseDepart": "Gare de Lyon-Perrache, Lyon",
+        "adresseArrivee": "Gare de Lyon, Paris",
+        "distance": "463 km",
+        "duree": "4h30"
+      },
+      "details": {
+        "date": "2025-10-22",
+        "heureDepart": "16:00",
+        "heureArrivee": "20:30",
+        "placesDisponibles": 2,
+        "prix": 14,
+        "vehicule": {
+          "marque": "Volkswagen",
+          "modele": "Golf",
+          "type": "Hybride",
+          "couleur": "Bleu",
+          "places": 5
+        },
+        "options": {
+          "climatisation": true,
+          "musique": true,
+          "wifi": false,
+          "bagages": true,
+          "animaux": true,
+          "fumeur": false
+        }
+      },
+      "commentaires": [
+        {
+          "passager": "Marc Leroy",
+          "note": 4,
+          "commentaire": "Conductrice ponctuelle et professionnelle.",
+          "date": "2025-09-14"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "conducteur": {
+        "nom": "Thomas Petit",
+        "photo": "images/dupont.jpeg",
+        "note": 4.6,
+        "telephone": "06 56 78 90 12",
+        "email": "thomas.petit@email.com"
+      },
+      "trajet": {
+        "depart": "Marseille",
+        "destination": "Nice",
+        "adresseDepart": "Gare Saint-Charles, Marseille",
+        "adresseArrivee": "Gare de Nice-Ville, Nice",
+        "distance": "200 km",
+        "duree": "2h30"
+      },
+      "details": {
+        "date": "2025-10-25",
+        "heureDepart": "10:00",
+        "heureArrivee": "12:30",
+        "placesDisponibles": 3,
+        "prix": 8,
+        "vehicule": {
+          "marque": "Citroën",
+          "modele": "C3",
+          "type": "Essence",
+          "couleur": "Gris",
+          "places": 5
+        },
+        "options": {
+          "climatisation": true,
+          "musique": false,
+          "wifi": false,
+          "bagages": true,
+          "animaux": false,
+          "fumeur": false
+        }
+      },
+      "commentaires": [
+        {
+          "passager": "Julie Moreau",
+          "note": 4,
+          "commentaire": "Trajet rapide et efficace.",
+          "date": "2025-09-16"
+        }
+      ]
+    }
+  ]
+}

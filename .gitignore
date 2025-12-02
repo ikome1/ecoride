@@ -1,0 +1,41 @@
+# Fichiers système
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Fichiers d'éditeur
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Variables d'environnement
+.env
+.env.local
+
+# Fichiers temporaires
+tmp/
+temp/
+*.tmp
+
+# Fichiers de backup
+*.bak
+*.backup
+*~
+
+# Node modules (si utilisé plus tard)
+node_modules/
+
+# Fichiers de cache
+cache/
+*.cache
+

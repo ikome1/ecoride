@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>EcoRide - Covoiturages Disponibles</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="covoiurage-disponibles.html">Accès aux covoiturages</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+        </ul>
+    </nav>
+
+    <main class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- En-tête -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-green-700 mb-4">🚗 Covoiturages Disponibles</h1>
+                <p class="text-gray-600 text-lg">Trouvez le covoiturage qui vous convient parmi nos offres disponibles</p>
+            </div>
+
+            <!-- Filtres de recherche -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">🔍 Rechercher un covoiturage</h2>
+                <form id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" id="filterDepart" placeholder="Ville de départ" 
+                           class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <input type="text" id="filterDestination" placeholder="Ville de destination" 
+                           class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <input type="date" id="filterDate" 
+                           class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition">
+                        Rechercher
+                    </button>
+                </form>
+                <button id="resetFilters" class="mt-4 text-green-600 hover:text-green-700 font-medium">
+                    Réinitialiser les filtres
+                </button>
+            </div>
+
+            <!-- Liste des covoiturages -->
+            <div id="tripsList" class="space-y-6">
+                <!-- Les covoiturages seront affichés ici -->
+            </div>
+
+            <!-- Message si aucun covoiturage -->
+            <div id="noTripsMessage" class="hidden text-center py-12">
+                <div class="text-6xl mb-4">🚗</div>
+                <h3 class="text-2xl font-bold text-gray-700 mb-2">Aucun covoiturage disponible</h3>
+                <p class="text-gray-600">Essayez de modifier vos critères de recherche</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de paiement -->
+    <div id="paymentModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">💳 Paiement</h3>
+                
+                <!-- Détails de la réservation -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">Trajet:</span>
+                        <span class="font-semibold" id="paymentTripDetails"></span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">Chauffeur:</span>
+                        <span class="font-semibold" id="paymentDriver"></span>
+                    </div>
+                    <div class="flex justify-between border-t pt-2">
+                        <span class="text-gray-900 font-bold">Total:</span>
+                        <span class="text-2xl font-bold text-green-600" id="paymentAmount"></span>
+                    </div>
+                </div>
+
+                <!-- Méthode de paiement -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Choisir votre méthode de paiement</label>
+                    
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="paymentMethod" value="card" class="h-4 w-4 text-green-600" checked>
+                            <span class="ml-3 text-gray-700">
+                                <span class="font-medium">💳 Carte bancaire</span>
+                                <p class="text-xs text-gray-500">Visa, Mastercard, etc.</p>
+                            </span>
+                        </label>
+                        
+                        <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="paymentMethod" value="paypal" class="h-4 w-4 text-green-600">
+                            <span class="ml-3 text-gray-700">
+                                <span class="font-medium">🅿️ PayPal</span>
+                                <p class="text-xs text-gray-500">Payer avec votre compte PayPal</p>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Message de simulation -->
+                <div class="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-lg mb-4 text-sm">
+                    ℹ️ <strong>Mode démo:</strong> Ceci est une simulation de paiement pour le projet scolaire. Aucun vrai paiement ne sera effectué.
+                </div>
+
+                <!-- Boutons -->
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hidePaymentModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                        Annuler
+                    </button>
+                    <button type="button" onclick="processPayment()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                        Payer et réserver
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/userManager.js"></script>
+    <script src="js/tripManager.js"></script>
+    <script src="js/navbar.js"></script>
+    <script>
+        // Covoiturages de démonstration
+        const demoTrips = [
+            {
+                id: 1,
+                driver: 'Jean Dupont',
+                driverPhoto: 'images/dupont.jpeg',
+                departure: 'Paris',
+                destination: 'Lyon',
+                date: '2025-10-20',
+                time: '09:00',
+                duration: '3h',
+                price: 25,
+                availableSeats: 3,
+                totalSeats: 4,
+                vehicle: 'Renault Zoe',
+                vehicleType: 'Électrique',
+                rating: 4.8,
+                description: 'Trajet confortable en voiture électrique, réservation possible.'
+            },
+            {
+                id: 2,
+                driver: 'Marie Martin',
+                driverPhoto: 'images/dupont.jpeg',
+                departure: 'Lyon',
+                destination: 'Marseille',
+                date: '2025-10-21',
+                time: '14:30',
+                duration: '2h30',
+                price: 20,
+                availableSeats: 2,
+                totalSeats: 5,
+                vehicle: 'Tesla Model 3',
+                vehicleType: 'Électrique',
+                rating: 5.0,
+                description: 'Conducteur expérimenté, voyage agréable garanti.'
+            },
+            {
+                id: 3,
+                driver: 'Pierre Dubois',
+                driverPhoto: 'images/dupont.jpeg',
+                departure: 'Paris',
+                destination: 'Bordeaux',
+                date: '2025-10-22',
+                time: '08:00',
+                duration: '4h',
+                price: 30,
+                availableSeats: 1,
+                totalSeats: 4,
+                vehicle: 'Peugeot 208',
+                vehicleType: 'Essence',
+                rating: 4.5,
+                description: 'Départ tôt le matin, arrivée avant midi.'
+            },
+            {
+                id: 4,
+                driver: 'Sophie Laurent',
+                driverPhoto: 'images/dupont.jpeg',
+                departure: 'Bordeaux',
+                destination: 'Paris',
+                date: '2025-10-23',
+                time: '15:00',
+                duration: '4h',
+                price: 28,
+                availableSeats: 3,
+                totalSeats: 5,
+                vehicle: 'Nissan Leaf',
+                vehicleType: 'Électrique',
+                rating: 4.9,
+                description: 'Véhicule électrique, départ confortable de l\'après-midi.'
+            }
+        ];
+
+        // Fonction pour convertir un covoiturage du format tripManager au format de cette page
+        function convertTripFormat(trip) {
+            return {
+                id: trip.id,
+                driver: trip.conducteur?.nom || 'Conducteur inconnu',
+                driverPhoto: trip.conducteur?.photo || 'images/dupont.jpeg',
+                departure: trip.trajet?.depart || '',
+                destination: trip.trajet?.destination || '',
+                date: trip.details?.date || '',
+                time: trip.details?.heureDepart || '',
+                duration: trip.trajet?.duree || '',
+                price: trip.details?.prix || 0,
+                availableSeats: trip.details?.placesDisponibles || 0,
+                totalSeats: trip.details?.vehicule?.places || 0,
+                vehicle: `${trip.details?.vehicule?.marque || ''} ${trip.details?.vehicule?.modele || ''}`.trim(),
+                vehicleType: trip.details?.vehicule?.type || 'Inconnu',
+                rating: trip.conducteur?.note || 5.0,
+                description: trip.description || `Trajet de ${trip.trajet?.depart} vers ${trip.trajet?.destination}`
+            };
+        }
+
+        // Charger tous les covoiturages (démo + utilisateurs)
+        let availableTrips = [...demoTrips];
+        
+        // Charger les covoiturages créés par les utilisateurs
+        if (typeof tripManager !== 'undefined') {
+            tripManager.syncUserTrips();
+            const userTrips = tripManager.getAllTrips();
+            const convertedUserTrips = userTrips.map(trip => convertTripFormat(trip));
+            availableTrips = [...demoTrips, ...convertedUserTrips];
+            console.log('Total covoiturages chargés:', availableTrips.length, '(démo:', demoTrips.length, ', utilisateurs:', convertedUserTrips.length, ')');
+        }
+
+        // Fonction pour trier les covoiturages par date (du plus récent au plus ancien)
+        function sortTripsByDate(trips) {
+            return trips.sort((a, b) => {
+                const dateA = new Date(a.date + 'T' + (a.time || '00:00')).getTime();
+                const dateB = new Date(b.date + 'T' + (b.time || '00:00')).getTime();
+                return dateB - dateA; // Plus récent en premier
+            });
+        }
+
+        // Trier les covoiturages par date au chargement
+        availableTrips = sortTripsByDate(availableTrips);
+
+        // Fonction pour afficher les covoiturages
+        function displayTrips(trips) {
+            const tripsList = document.getElementById('tripsList');
+            const noTripsMessage = document.getElementById('noTripsMessage');
+
+            if (trips.length === 0) {
+                tripsList.innerHTML = '';
+                noTripsMessage.classList.remove('hidden');
+                return;
+            }
+
+            noTripsMessage.classList.add('hidden');
+            tripsList.innerHTML = '';
+
+            trips.forEach(trip => {
+                const tripCard = document.createElement('div');
+                tripCard.className = 'bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow';
+                tripCard.innerHTML = `
+                    <div class="flex flex-col lg:flex-row justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <img src="${trip.driverPhoto}" alt="${trip.driver}" class="w-16 h-16 rounded-full">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900">${trip.driver}</h3>
+                                    <p class="text-yellow-500 text-lg">⭐ ${trip.rating}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <p class="text-gray-600 mb-1"><strong>Départ :</strong></p>
+                                    <p class="text-green-700 font-semibold">${trip.departure}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1"><strong>Destination :</strong></p>
+                                    <p class="text-green-700 font-semibold">${trip.destination}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1"><strong>Date :</strong></p>
+                                    <p>${new Date(trip.date).toLocaleDateString('fr-FR')}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1"><strong>Heure :</strong></p>
+                                    <p>${trip.time} (${trip.duration})</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1"><strong>Véhicule :</strong></p>
+                                    <p>${trip.vehicle} <span class="text-green-600">🌱 ${trip.vehicleType}</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1"><strong>Places :</strong></p>
+                                    <p class="font-semibold ${trip.availableSeats === 0 ? 'text-red-600' : 'text-green-600'}">
+                                        ${trip.availableSeats} / ${trip.totalSeats} disponible${trip.availableSeats > 1 ? 's' : ''}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-700 mb-4">${trip.description}</p>
+                        </div>
+                        
+                        <div class="lg:ml-6 lg:border-l lg:pl-6 border-gray-200">
+                            <div class="text-center mb-4">
+                                <p class="text-3xl font-bold text-green-600">${trip.price}€</p>
+                                <p class="text-gray-600 text-sm">par personne</p>
+                            </div>
+                            
+                            <button onclick="contactDriver(${trip.id})" 
+                                    class="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition mb-3">
+                                📞 Contacter le chauffeur
+                            </button>
+                            
+                            <button onclick="bookTrip(${trip.id})" 
+                                    ${trip.availableSeats === 0 ? 'disabled' : ''}
+                                    class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                ✋ Réserver
+                            </button>
+                        </div>
+                    </div>
+                `;
+                tripsList.appendChild(tripCard);
+            });
+        }
+
+        // Fonction pour contacter le chauffeur
+        function contactDriver(tripId) {
+            const trip = availableTrips.find(t => t.id === tripId);
+            if (trip) {
+                window.location.href = `contact.html?trip=${tripId}&driver=${encodeURIComponent(trip.driver)}`;
+            }
+        }
+
+        // Variable globale pour stocker le voyage en cours de réservation
+        let currentBookingTrip = null;
+
+        // Fonction pour réserver un covoiturage
+        function bookTrip(tripId) {
+            if (!userManager.isLoggedIn()) {
+                alert('Vous devez être connecté pour réserver un covoiturage.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const trip = availableTrips.find(t => t.id === tripId);
+            if (trip && trip.availableSeats > 0) {
+                currentBookingTrip = trip;
+                showPaymentModal();
+            }
+        }
+
+        // Fonction pour afficher le modal de paiement
+        function showPaymentModal() {
+            if (!currentBookingTrip) return;
+
+            document.getElementById('paymentTripDetails').textContent = 
+                `${currentBookingTrip.departure} → ${currentBookingTrip.destination}`;
+            document.getElementById('paymentDriver').textContent = currentBookingTrip.driver;
+            document.getElementById('paymentAmount').textContent = `${currentBookingTrip.price}€`;
+
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        // Fonction pour cacher le modal de paiement
+        function hidePaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+            currentBookingTrip = null;
+        }
+
+        // Fonction pour traiter le paiement
+        function processPayment() {
+            if (!currentBookingTrip) return;
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            // Simuler le processus de paiement
+            setTimeout(() => {
+                // Créer la réservation dans le système
+                const user = userManager.getCurrentUser();
+                const reservation = {
+                    id: Date.now(),
+                    tripId: currentBookingTrip.id,
+                    userId: user.id,
+                    driver: currentBookingTrip.driver,
+                    departure: currentBookingTrip.departure,
+                    destination: currentBookingTrip.destination,
+                    date: currentBookingTrip.date,
+                    price: currentBookingTrip.price,
+                    paymentMethod: paymentMethod,
+                    status: 'confirmed',
+                    createdAt: new Date().toISOString()
+                };
+
+                // Sauvegarder la réservation
+                saveReservation(reservation);
+
+                // Cacher le modal
+                hidePaymentModal();
+
+                // Afficher le message de succès
+                alert(`✅ Réservation confirmée !\n\nTrajet: ${currentBookingTrip.departure} → ${currentBookingTrip.destination}\nChauffeur: ${currentBookingTrip.driver}\nPrix: ${currentBookingTrip.price}€\n\nMerci pour votre confiance !`);
+
+                // Rediriger vers le dashboard
+                window.location.href = 'dashboard.html';
+            }, 500);
+        }
+
+        // Fonction pour sauvegarder une réservation
+        function saveReservation(reservation) {
+            let reservations = JSON.parse(localStorage.getItem('ecoride_reservations') || '[]');
+            reservations.push(reservation);
+            localStorage.setItem('ecoride_reservations', JSON.stringify(reservations));
+        }
+
+        // Gestion des filtres
+        document.getElementById('filterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const depart = document.getElementById('filterDepart').value.toLowerCase();
+            const destination = document.getElementById('filterDestination').value.toLowerCase();
+            const date = document.getElementById('filterDate').value;
+
+            let filteredTrips = availableTrips;
+
+            if (depart) {
+                filteredTrips = filteredTrips.filter(t => t.departure.toLowerCase().includes(depart));
+            }
+
+            if (destination) {
+                filteredTrips = filteredTrips.filter(t => t.destination.toLowerCase().includes(destination));
+            }
+
+            if (date) {
+                filteredTrips = filteredTrips.filter(t => t.date === date);
+            }
+
+            // Trier les résultats filtrés par date (du plus récent au plus ancien)
+            filteredTrips = sortTripsByDate(filteredTrips);
+            displayTrips(filteredTrips);
+        });
+
+        // Reset filters
+        document.getElementById('resetFilters').addEventListener('click', function() {
+            document.getElementById('filterForm').reset();
+            displayTrips(availableTrips);
+        });
+
+        // Initialisation
+        displayTrips(availableTrips);
+
+        // Exporter les fonctions
+        window.contactDriver = contactDriver;
+        window.bookTrip = bookTrip;
+        window.showPaymentModal = showPaymentModal;
+        window.hidePaymentModal = hidePaymentModal;
+        window.processPayment = processPayment;
+    </script>
+</body>
+</html>

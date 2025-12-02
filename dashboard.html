@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>EcoRide - Mon Espace</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/EcoRide 🌿.png" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Accueil</a></li>
+            <li><a href="login.html">Connexion</a></li>
+            <li><a href="register.html">Créer un compte</a></li>
+            <li><a href="#" onclick="logout()">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <main class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- En-tête utilisateur -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900" id="userName">Bonjour, Utilisateur !</h1>
+                        <p class="text-gray-600">Gérez vos covoiturages et votre profil</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-green-600" id="userCredits">20</div>
+                        <div class="text-sm text-gray-500">crédits disponibles</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation par onglets -->
+            <div class="bg-white rounded-lg shadow-md mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8 px-6">
+                        <button id="tab-profile" onclick="showTab('profile')" class="tab-button border-b-2 border-green-500 text-green-600 py-4 px-1 text-sm font-medium">
+                            👤 Mon Profil
+                        </button>
+                        <button id="tab-vehicles" onclick="showTab('vehicles')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            🚗 Mes Véhicules
+                        </button>
+                        <button id="tab-trips" onclick="showTab('trips')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            🗺️ Mes Voyages
+                        </button>
+                        <button id="tab-create" onclick="showTab('create')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            ➕ Créer un Voyage
+                        </button>
+                        <button id="tab-search" onclick="showTab('search')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            🔍 Rechercher
+                        </button>
+                        <button id="tab-stats" onclick="showTab('stats')" class="tab-button border-b-2 border-transparent text-gray-500 py-4 px-1 text-sm font-medium">
+                            📊 Statistiques
+                        </button>
+                    </nav>
+                    </div>
+                    
+                <!-- Contenu des onglets -->
+                <div class="p-6">
+                    
+                    <!-- Onglet Profil -->
+                    <div id="content-profile" class="tab-content">
+                        <h2 class="text-xl font-bold mb-4">Mon Profil</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold mb-3">Informations personnelles</h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Pseudo</label>
+                                        <input type="text" id="profilePseudo" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" id="profileEmail" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Type d'utilisateur</label>
+                                        <select id="profileType" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                                            <option value="passager">Passager</option>
+                                            <option value="chauffeur">Chauffeur</option>
+                                            <option value="chauffeur-passager">Chauffeur & Passager</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-3">Préférences</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="prefFumeur" class="h-4 w-4 text-green-600">
+                                        <label for="prefFumeur" class="ml-2 text-sm text-gray-700">Accepter les fumeurs</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="prefAnimaux" class="h-4 w-4 text-green-600">
+                                        <label for="prefAnimaux" class="ml-2 text-sm text-gray-700">Accepter les animaux</label>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Autres préférences</label>
+                                        <textarea id="prefAutres" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Séparez par des virgules"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button onclick="saveProfile()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                                Sauvegarder le profil
+                        </button>
+                    </div>
+                    </div>
+                    
+                    <!-- Onglet Véhicules -->
+                    <div id="content-vehicles" class="tab-content hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Mes Véhicules</h2>
+                            <button onclick="showAddVehicleModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                ➕ Ajouter un véhicule
+                        </button>
+                        </div>
+                        <div id="vehiclesList" class="space-y-4">
+                            <!-- Les véhicules s'afficheront ici -->
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Voyages -->
+                    <div id="content-trips" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Mes Voyages</h2>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold text-blue-800 mb-3">🚗 En tant que chauffeur</h3>
+                                <div id="driverTrips" class="space-y-3">
+                                    <!-- Voyages chauffeur -->
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-green-800 mb-3">👤 En tant que passager</h3>
+                                <div id="passengerTrips" class="space-y-3">
+                                    <!-- Voyages passager -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Créer un voyage -->
+                    <div id="content-create" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Créer un voyage</h2>
+                        <form id="createTripForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ville de départ</label>
+                                <input type="text" id="tripDepart" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ville d'arrivée</label>
+                                <input type="text" id="tripDestination" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date du voyage</label>
+                                <input type="date" id="tripDate" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Heure de départ</label>
+                                <input type="time" id="tripHeureDepart" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Prix (crédits)</label>
+                                <input type="number" id="tripPrix" min="3" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Véhicule</label>
+                                <select id="tripVehicle" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                                    <option value="">Sélectionner un véhicule</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700">
+                                    Créer le voyage
+                        </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Onglet Rechercher -->
+                    <div id="content-search" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Rechercher un covoiturage</h2>
+                        <form id="searchTripForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <input type="text" id="searchDepart" placeholder="Ville de départ" class="border border-gray-300 rounded-md px-3 py-2">
+                            <input type="text" id="searchDestination" placeholder="Ville d'arrivée" class="border border-gray-300 rounded-md px-3 py-2">
+                            <input type="date" id="searchDate" class="border border-gray-300 rounded-md px-3 py-2">
+                            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                                🔍 Rechercher
+                            </button>
+                        </form>
+                        <div id="searchResults" class="space-y-4">
+                            <!-- Résultats de recherche -->
+                    </div>
+                </div>
+                
+                    <!-- Onglet Statistiques -->
+                    <div id="content-stats" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Mes Statistiques</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h3 class="font-semibold text-blue-800 mb-2">Voyages effectués</h3>
+                                <div class="text-2xl font-bold text-blue-600" id="totalTrips">0</div>
+                            </div>
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <h3 class="font-semibold text-green-800 mb-2">Crédits gagnés</h3>
+                                <div class="text-2xl font-bold text-green-600" id="creditsEarned">0</div>
+                            </div>
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                <h3 class="font-semibold text-red-800 mb-2">Crédits dépensés</h3>
+                                <div class="text-2xl font-bold text-red-600" id="creditsSpent">0</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3">Évolution des voyages</h3>
+                                <canvas id="tripsChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h3 class="font-semibold mb-3">Types de véhicules</h3>
+                                <canvas id="vehiclesChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal d'ajout de véhicule -->
+    <div id="addVehicleModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Ajouter un véhicule</h3>
+                <form id="addVehicleForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Marque</label>
+                        <select id="vehicleMarque" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            <option value="">Sélectionner une marque</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Tesla">Tesla</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="Porsche">Porsche</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Renault">Renault</option>
+                            <option value="Peugeot">Peugeot</option>
+                            <option value="Citroën">Citroën</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Modèle</label>
+                        <input type="text" id="vehicleModele" required class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Ex: Corolla, Civic, Model 3...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Plaque d'immatriculation</label>
+                        <input type="text" id="vehiclePlaque" required class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Ex: AB-123-CD">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date d'immatriculation</label>
+                        <input type="date" id="vehicleDateImmat" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Couleur</label>
+                        <input type="text" id="vehicleCouleur" required class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Ex: Blanc, Noir, Rouge...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de places</label>
+                        <input type="number" id="vehiclePlaces" min="2" max="9" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type de carburant</label>
+                        <select id="vehicleType" required class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            <option value="Essence">Essence</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Électrique">Électrique</option>
+                            <option value="Hybride">Hybride</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideAddVehicleModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                            Annuler
+                        </button>
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            Ajouter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/userManager.js"></script>
+    <script src="js/tripManager.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/realtime.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
