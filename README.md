@@ -6,53 +6,53 @@ Application web de covoiturage écologique.
 
 ### Option 1 : Docker (Le plus simple) ⭐
 
-**Prérequis** : Docker Desktop installé
+**Il te faut juste** : Docker Desktop installé
 
 ```bash
-# 1. Ouvrir un terminal dans le dossier du projet
+# 1. Tu ouvres un terminal dans le dossier du projet
 cd EcoRide--main
 
-# 2. Lancer cette commande (UNE SEULE COMMANDE !)
+# 2. Tu lances cette commande (UNE SEULE COMMANDE !)
 docker-compose up -d
 
-# 3. Attendre 30 secondes (première fois : 2-3 minutes)
+# 3. Tu attends 30 secondes (la première fois ça peut prendre 2-3 minutes)
 
-# 4. Ouvrir dans le navigateur
+# 4. Tu ouvres ton navigateur sur
 http://localhost:8080
 ```
 
-**C'est tout !** 🎉
+**Et voilà, c'est tout !** 🎉
 
-**Ce qui est fait automatiquement :**
+**Ce qui se fait tout seul :**
 - ✅ PHP 8.1 + Apache + toutes les extensions
 - ✅ MySQL 8.0 + base de données créée + SQL importé
-- ✅ Configuration automatique (pas besoin de modifier `config.php`)
+- ✅ Configuration automatique (tu n'as pas besoin de modifier `config.php`)
 - ✅ Comptes de test créés
 
-**Aucune configuration manuelle nécessaire !**
+**Tu n'as rien à configurer manuellement !**
 
 ### Option 2 : XAMPP
 
 ```bash
-# 1. Installer XAMPP avec PHP 8.1+
-# Télécharger depuis https://www.apachefriends.org/
+# 1. Tu installes XAMPP avec PHP 8.1+
+# Tu télécharges depuis https://www.apachefriends.org/
 
-# 2. Démarrer Apache et MySQL dans XAMPP
+# 2. Tu démarres Apache et MySQL dans XAMPP
 
-# 3. Créer la base de données
-# Ouvrir http://localhost/phpmyadmin
-# Créer une base "ecoride"
-# Importer database/ecoride.sql
+# 3. Tu crées la base de données
+# Tu ouvres http://localhost/phpmyadmin
+# Tu crées une base "ecoride"
+# Tu importes database/ecoride.sql
 
-# 4. Copier les fichiers dans
+# 4. Tu copies les fichiers dans
 # Windows : C:\xampp\htdocs\ecoride\
 # Mac : /Applications/XAMPP/htdocs/ecoride/
 
-# 5. Ouvrir dans le navigateur
+# 5. Tu ouvres ton navigateur sur
 http://localhost/ecoride/
 ```
 
-**Voir [INSTALLATION.md](INSTALLATION.md) pour plus de détails.**
+**Tu peux voir [INSTALLATION.md](INSTALLATION.md) pour plus de détails.**
 
 ---
 
