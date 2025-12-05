@@ -118,6 +118,12 @@ function showTab(tabName) {
         case 'reviews':
             loadReviews();
             break;
+        case 'users':
+            loadUsersEmployee();
+            break;
+        case 'vehicles':
+            loadVehiclesEmployee();
+            break;
         case 'stats':
             loadStats();
             break;
@@ -312,6 +318,307 @@ function refreshReviews() {
 function filterReviews() {
     loadReviews();
 }
+
+function loadUsersEmployee() {
+    const tbody = document.getElementById('usersTableBodyEmployee');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // IMPORTANT: Recharger les utilisateurs depuis localStorage pour avoir les dernières données
+    userManager.users = userManager.loadUsers();
+    userManager.employees = userManager.loadEmployees();
+    
+    // Charger tous les utilisateurs (sauf admins)
+    const allUsers = [
+        ...userManager.users.map(u => ({...u, source: 'users'})),
+        ...userManager.employees.map(e => ({...e, source: 'employees'}))
+    ];
+    
+    // Filtrer par recherche si nécessaire
+    const searchTerm = document.getElementById('searchUsersEmployee')?.value.toLowerCase() || '';
+    const filteredUsers = searchTerm 
+        ? allUsers.filter(u => 
+            u.pseudo.toLowerCase().includes(searchTerm) ||
+            (u.email && u.email.toLowerCase().includes(searchTerm))
+        )
+        : allUsers;
+    
+    if (filteredUsers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-4 text-center text-gray-500">Aucun utilisateur trouvé</td></tr>';
+        return;
+    }
+    
+    filteredUsers.forEach(user => {
+        const vehicleCount = user.vehicles ? user.vehicles.length : 0;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+            <td class="px-4 py-3 text-sm text-gray-900">${user.id}</td>
+            <td class="px-4 py-3 text-sm text-gray-900">${user.pseudo}</td>
+            <td class="px-4 py-3 text-sm text-gray-900">${user.email || 'N/A'}</td>
+            <td class="px-4 py-3 text-sm">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full ${
+                    user.role === 'employee' ? 'bg-blue-100 text-blue-800' :
+                    'bg-green-100 text-green-800'
+                }">${user.role}</span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-900">${user.credits !== undefined ? user.credits : 'N/A'}</td>
+            <td class="px-4 py-3 text-sm text-gray-900">${vehicleCount} véhicule(s)</td>
+            <td class="px-4 py-3 text-sm">
+                <button onclick="viewUserEmployee(${user.id}, '${user.source}')" class="text-blue-600 hover:text-blue-800" title="Voir les détails">
+                    👁️ Voir
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function loadVehiclesEmployee() {
+    const tbody = document.getElementById('vehiclesTableBodyEmployee');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // IMPORTANT: Recharger les utilisateurs depuis localStorage pour avoir les dernières données
+    userManager.users = userManager.loadUsers();
+    userManager.employees = userManager.loadEmployees();
+    
+    // Collecter tous les véhicules de tous les utilisateurs
+    let allVehicles = [];
+    const allUsers = [
+        ...userManager.users.map(u => ({...u, source: 'users'})),
+        ...userManager.employees.map(e => ({...e, source: 'employees'}))
+    ];
+    
+    allUsers.forEach(user => {
+        if (user.vehicles && user.vehicles.length > 0) {
+            user.vehicles.forEach(vehicle => {
+                allVehicles.push({
+                    ...vehicle,
+                    ownerId: user.id,
+                    ownerPseudo: user.pseudo,
+                    ownerEmail: user.email,
+                    ownerSource: user.source
+                });
+            });
+        }
+    });
+    
+    // Filtrer par recherche si nécessaire
+    const searchTerm = document.getElementById('searchVehiclesEmployee')?.value.toLowerCase() || '';
+    const filteredVehicles = searchTerm 
+        ? allVehicles.filter(v => 
+            v.plaque.toLowerCase().includes(searchTerm) ||
+            v.marque.toLowerCase().includes(searchTerm) ||
+            v.modele.toLowerCase().includes(searchTerm) ||
+            v.ownerPseudo.toLowerCase().includes(searchTerm)
+        )
+        : allVehicles;
+    
+    if (filteredVehicles.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-4 text-center text-gray-500">Aucun véhicule trouvé</td></tr>';
+        return;
+    }
+    
+    filteredVehicles.forEach(vehicle => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+            <td class="px-4 py-3 text-sm text-gray-900">
+                <div>
+                    <div class="font-medium">${vehicle.ownerPseudo}</div>
+                    <div class="text-xs text-gray-500">${vehicle.ownerEmail || 'N/A'}</div>
+                </div>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-900 font-mono">${vehicle.plaque || 'N/A'}</td>
+            <td class="px-4 py-3 text-sm text-gray-900">${vehicle.marque || 'N/A'}</td>
+            <td class="px-4 py-3 text-sm text-gray-900">${vehicle.modele || 'N/A'}</td>
+            <td class="px-4 py-3 text-sm">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full ${
+                    vehicle.type === 'Électrique' ? 'bg-green-100 text-green-800' :
+                    vehicle.type === 'Hybride' ? 'bg-blue-100 text-blue-800' :
+                    'bg-gray-100 text-gray-800'
+                }">${vehicle.type || 'N/A'}</span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-900">${vehicle.places || 'N/A'}</td>
+            <td class="px-4 py-3 text-sm">
+                <button onclick="viewVehicleOwnerEmployee(${vehicle.ownerId}, '${vehicle.ownerSource}')" class="text-blue-600 hover:text-blue-800" title="Voir le propriétaire">
+                    👤
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function refreshUsersEmployee() {
+    loadUsersEmployee();
+}
+
+function refreshVehiclesEmployee() {
+    loadVehiclesEmployee();
+}
+
+function viewUserEmployee(userId, source) {
+    // IMPORTANT: Recharger les utilisateurs depuis localStorage pour avoir les dernières données
+    userManager.users = userManager.loadUsers();
+    userManager.employees = userManager.loadEmployees();
+    
+    // Trouver l'utilisateur
+    let user = null;
+    if (source === 'users') {
+        user = userManager.users.find(u => u.id === userId);
+    } else if (source === 'employees') {
+        user = userManager.employees.find(e => e.id === userId);
+    }
+    
+    if (!user) {
+        alert('Utilisateur non trouvé');
+        return;
+    }
+    
+    // Construire le contenu du modal
+    const modal = document.getElementById('userDetailsModalEmployee');
+    const content = document.getElementById('userDetailsContentEmployee');
+    
+    if (!modal || !content) return;
+    
+    // Informations de base
+    let html = `
+        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <h4 class="font-semibold text-lg mb-3">Informations personnelles</h4>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-600">ID</label>
+                    <p class="text-gray-900">${user.id}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Pseudo</label>
+                    <p class="text-gray-900">${user.pseudo || 'N/A'}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Email</label>
+                    <p class="text-gray-900">${user.email || 'N/A'}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Rôle</label>
+                    <p class="text-gray-900">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${
+                            user.role === 'employee' ? 'bg-blue-100 text-blue-800' :
+                            'bg-green-100 text-green-800'
+                        }">${user.role || 'N/A'}</span>
+                    </p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Type</label>
+                    <p class="text-gray-900">${user.type || 'N/A'}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Crédits</label>
+                    <p class="text-gray-900">${user.credits !== undefined ? user.credits : 'N/A'}</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Véhicules
+    if (user.vehicles && user.vehicles.length > 0) {
+        html += `
+            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                <h4 class="font-semibold text-lg mb-3">Véhicules (${user.vehicles.length})</h4>
+                <div class="space-y-3">
+        `;
+        user.vehicles.forEach(vehicle => {
+            html += `
+                <div class="bg-white rounded p-3 border border-blue-200">
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div><span class="font-medium">Plaque:</span> <span class="font-mono">${vehicle.plaque || 'N/A'}</span></div>
+                        <div><span class="font-medium">Marque:</span> ${vehicle.marque || 'N/A'}</div>
+                        <div><span class="font-medium">Modèle:</span> ${vehicle.modele || 'N/A'}</div>
+                        <div><span class="font-medium">Type:</span> ${vehicle.type || 'N/A'}</div>
+                        <div><span class="font-medium">Places:</span> ${vehicle.places || 'N/A'}</div>
+                        <div><span class="font-medium">Date immat.:</span> ${vehicle.dateImmatriculation || 'N/A'}</div>
+                    </div>
+                </div>
+            `;
+        });
+        html += `
+                </div>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                <h4 class="font-semibold text-lg mb-3">Véhicules</h4>
+                <p class="text-gray-600">Aucun véhicule enregistré</p>
+            </div>
+        `;
+    }
+    
+    // Trajets
+    if (user.trips && user.trips.length > 0) {
+        html += `
+            <div class="bg-green-50 rounded-lg p-4 mb-4">
+                <h4 class="font-semibold text-lg mb-3">Trajets (${user.trips.length})</h4>
+                <div class="space-y-2">
+        `;
+        user.trips.forEach(trip => {
+            html += `
+                <div class="bg-white rounded p-2 border border-green-200 text-sm">
+                    <span class="font-medium">${trip.depart || 'N/A'}</span> → 
+                    <span class="font-medium">${trip.destination || 'N/A'}</span> 
+                    (${trip.date || 'N/A'}) - ${trip.prix || 'N/A'} crédits
+                </div>
+            `;
+        });
+        html += `
+                </div>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="bg-green-50 rounded-lg p-4 mb-4">
+                <h4 class="font-semibold text-lg mb-3">Trajets</h4>
+                <p class="text-gray-600">Aucun trajet créé</p>
+            </div>
+        `;
+    }
+    
+    content.innerHTML = html;
+    modal.classList.remove('hidden');
+}
+
+function hideUserDetailsModalEmployee() {
+    const modal = document.getElementById('userDetailsModalEmployee');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+function viewVehicleOwnerEmployee(ownerId, ownerSource) {
+    viewUserEmployee(ownerId, ownerSource);
+}
+
+// Ajouter des listeners pour la recherche
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const searchUsersInput = document.getElementById('searchUsersEmployee');
+        if (searchUsersInput) {
+            searchUsersInput.addEventListener('input', function() {
+                loadUsersEmployee();
+            });
+        }
+        
+        const searchVehiclesInput = document.getElementById('searchVehiclesEmployee');
+        if (searchVehiclesInput) {
+            searchVehiclesInput.addEventListener('input', function() {
+                loadVehiclesEmployee();
+            });
+        }
+    }, 200);
+});
 
 function openReviewModal(reviewId) {
     currentReviewId = reviewId;
