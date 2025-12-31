@@ -4,6 +4,7 @@
 
 require_once 'config.php';
 require_once 'cache.php';
+require_once 'mongodb.php';
 
 class TripsAPI {
     private $conn;
@@ -124,6 +125,16 @@ class TripsAPI {
         
         // Mettre en cache pour 5 minutes
         $cacheService->set($cache_key, $response, 300);
+        
+        // Logger la recherche dans MongoDB (NoSQL)
+        if (function_exists('mongodb_log_search')) {
+            $searchParams = [
+                'depart' => $depart,
+                'destination' => $destination,
+                'date' => $date
+            ];
+            mongodb_log_search($searchParams, count($formattedTrips));
+        }
         
         sendResponse($response);
     }

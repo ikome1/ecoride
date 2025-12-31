@@ -20,6 +20,7 @@
  */
 
 require_once 'config.php';
+require_once 'mongodb.php';
 
 /**
  * Classe AuthAPI
@@ -190,6 +191,11 @@ class AuthAPI {
             // Sécurité : Ne jamais renvoyer le mot de passe hashé au client
             unset($user['password']);
             
+            // Logger la connexion dans MongoDB (NoSQL)
+            if (function_exists('mongodb_log_activity')) {
+                mongodb_log_activity($user['id'], 'login', ['role' => 'user']);
+            }
+            
             // Réponse de succès avec token et informations utilisateur
             sendResponse([
                 'success' => true,
@@ -214,6 +220,11 @@ class AuthAPI {
             
             unset($employee['password']);
             
+            // Logger la connexion dans MongoDB (NoSQL)
+            if (function_exists('mongodb_log_activity')) {
+                mongodb_log_activity($employee['id'], 'login', ['role' => 'employee']);
+            }
+            
             sendResponse([
                 'success' => true,
                 'message' => 'Connexion employé réussie',
@@ -235,6 +246,11 @@ class AuthAPI {
             $_SESSION['user_id'] = $admin['id'];
             
             unset($admin['password']);
+            
+            // Logger la connexion dans MongoDB (NoSQL)
+            if (function_exists('mongodb_log_activity')) {
+                mongodb_log_activity($admin['id'], 'login', ['role' => 'admin']);
+            }
             
             sendResponse([
                 'success' => true,

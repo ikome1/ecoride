@@ -47,11 +47,12 @@ class Database {
             $this->username = getenv('DB_USER') ?: 'ecoride_user';  // Utilisateur
             $this->password = getenv('DB_PASS') ?: 'ecoride_password'; // Mot de passe
         } else {
-            // Configuration XAMPP (par défaut)
+            // Configuration MAMP/XAMPP (par défaut)
             $this->host = 'localhost';      // Serveur local
             $this->db_name = 'ecoride';    // Nom de la base
-            $this->username = 'root';     // Utilisateur par défaut XAMPP
-            $this->password = '';          // Pas de mot de passe par défaut
+            $this->username = 'root';     // Utilisateur par défaut
+            // MAMP utilise 'root' comme mot de passe par défaut, XAMPP utilise ''
+            $this->password = 'root';      // Mot de passe MAMP (changer en '' pour XAMPP)
         }
     }
 

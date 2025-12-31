@@ -9,11 +9,15 @@ services:
       - .:/var/www/html
     depends_on:
       - db
+      - mongodb
     environment:
       - DB_HOST=db
       - DB_NAME=ecoride
       - DB_USER=ecoride_user
       - DB_PASS=ecoride_password
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DB=ecoride_logs
     networks:
       - ecoride-network
 
@@ -32,8 +36,20 @@ services:
     networks:
       - ecoride-network
 
+  mongodb:
+    image: mongo:7.0
+    environment:
+      - MONGO_INITDB_DATABASE=ecoride_logs
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - ecoride-network
+
 volumes:
   db_data:
+  mongodb_data:
 
 networks:
   ecoride-network:

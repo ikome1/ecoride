@@ -8,8 +8,15 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
+    libcurl4-openssl-dev \
+    pkg-config \
+    libssl-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql
+
+# Installer l'extension MongoDB pour PHP
+RUN pecl install mongodb && \
+    docker-php-ext-enable mongodb
 
 # Redis supprimé - utilisation uniquement de MySQL
 

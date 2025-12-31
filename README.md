@@ -32,8 +32,9 @@ http://localhost:8080
 **Et voilà, c'est tout !** 🎉
 
 **Ce qui se fait tout seul :**
-- ✅ PHP 8.1 + Apache + toutes les extensions
+- ✅ PHP 8.1 + Apache + toutes les extensions (y compris MongoDB)
 - ✅ MySQL 8.0 + base de données créée + SQL importé
+- ✅ MongoDB 7.0 pour les logs d'activité (NoSQL)
 - ✅ Configuration automatique (tu n'as pas besoin de modifier `config.php`)
 - ✅ Comptes de test créés
 
@@ -130,9 +131,10 @@ Tu peux vérifier que tout démarre avec :
 docker-compose ps
 ```
 
-Tu devrais voir 2 services qui tournent :
+Tu devrais voir 3 services qui tournent :
 - `web` (ton application PHP)
 - `db` (MySQL)
+- `mongodb` (MongoDB pour les logs)
 
 ### Étape 4 : Accéder à l'application
 
@@ -169,7 +171,7 @@ Quand tu lances `docker-compose up -d`, Docker fait tout ça automatiquement :
    - Application web sur le port 8080
    - MySQL sur le port 3306
 
-**Résultat :** Tu as une application qui marche avec **100% SQL (MySQL uniquement)** sans rien configurer manuellement !
+**Résultat :** Tu as une application qui marche avec **MySQL (SQL) + MongoDB (NoSQL)** sans rien configurer manuellement !
 
 ### Commandes utiles pour Docker
 
@@ -381,8 +383,10 @@ EcoRide--main/
 
 ### Back-end
 - **PHP 8.1+** : Langage serveur pour l'API REST
-- **MySQL 8.0** : Base de données relationnelle (100% SQL)
-- **PDO (PHP Data Objects)** : Accès sécurisé à la base de données
+- **MySQL 8.0** : Base de données relationnelle (SQL) - Données structurées
+- **MongoDB 7.0** : Base de données NoSQL - Logs d'activité et statistiques
+- **PDO (PHP Data Objects)** : Accès sécurisé à la base de données MySQL
+- **MongoDB PHP Extension** : Accès à MongoDB pour les logs
 - **Apache** : Serveur web
 
 ### Outils et Infrastructure
@@ -423,10 +427,15 @@ EcoRide--main/
 
 ## 🗄️ Base de Données
 
-### MySQL (SQL uniquement)
+### MySQL (SQL) - Données structurées
 - **Tables** : users, vehicles, trips, reservations, reviews, transactions, notifications, role, Marque, configuration, parametre
 - **Schéma** : `database/ecoride.sql`
-- **100% SQL** - Aucune base de données NoSQL utilisée
+- **Usage** : Données relationnelles, utilisateurs, trajets, réservations
+
+### MongoDB (NoSQL) - Logs et statistiques
+- **Collections** : activity_logs, search_logs, realtime_stats
+- **Usage** : Logs d'activité utilisateur, logs de recherche, statistiques en temps réel
+- **Composant** : `api/mongodb.php` - Composant d'accès aux données NoSQL
 
 ### Structure de la base de données
 
@@ -544,6 +553,9 @@ date.timezone = Europe/Paris
 - **[CONFORMITE.md](CONFORMITE.md)** - Vérification de conformité aux critères
 - **[ECF-DOCUMENTATION.md](ECF-DOCUMENTATION.md)** - Documentation complète pour l'ECF
 - **[PRESENTATION.md](PRESENTATION.md)** - Présentation détaillée du projet
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Guide complet de déploiement en production
+- **[TESTS.md](TESTS.md)** - Guide complet de test de tous les composants
+- **[maquette.html](maquette.html)** - Maquette des interfaces utilisateur
 
 ---
 
