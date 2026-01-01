@@ -32,9 +32,9 @@ http://localhost:8080
 **Et voilà, c'est tout !** 🎉
 
 **Ce qui se fait tout seul :**
-- ✅ PHP 8.1 + Apache + toutes les extensions (y compris MongoDB)
-- ✅ MySQL 8.0 + base de données créée + SQL importé
-- ✅ MongoDB 7.0 pour les logs d'activité (NoSQL)
+- ✅ PHP 8.3 + Apache + toutes les extensions (y compris MongoDB)
+- ✅ MySQL 8.4 + base de données créée + SQL importé
+- ✅ MongoDB 7.x pour les logs d'activité (NoSQL)
 - ✅ Configuration automatique (tu n'as pas besoin de modifier `config.php`)
 - ✅ Comptes de test créés
 
@@ -68,8 +68,8 @@ http://localhost/ecoride/
 ### Versions nécessaires
 
 Pour faire tourner le projet, il te faut :
-- **PHP** : version 8.1 ou plus récente (8.2, 8.3, ça marche aussi)
-- **MySQL** : version 5.7 minimum, mais 8.0 c'est mieux
+- **PHP** : version 8.1 ou plus récente (8.3 recommandé)
+- **MySQL** : version 8.0 minimum (8.4 recommandé)
 - **Apache** : version 2.4 ou plus récente
 
 ### Extensions PHP à avoir
@@ -150,8 +150,8 @@ http://localhost:8080
 Quand tu lances `docker-compose up -d`, Docker fait tout ça automatiquement :
 
 1. **Il télécharge et installe tout seul :**
-   - PHP 8.1 avec Apache
-   - MySQL 8.0
+   - PHP 8.3 avec Apache
+   - MySQL 8.4
 
 2. **Il installe toutes les extensions PHP nécessaires :**
    - `pdo` et `pdo_mysql` (pour MySQL)
@@ -382,9 +382,9 @@ EcoRide--main/
 - **Chart.js** : Bibliothèque pour l'affichage de graphiques et statistiques
 
 ### Back-end
-- **PHP 8.1+** : Langage serveur pour l'API REST
-- **MySQL 8.0** : Base de données relationnelle (SQL) - Données structurées
-- **MongoDB 7.0** : Base de données NoSQL - Logs d'activité et statistiques
+- **PHP 8.3** : Langage serveur pour l'API REST (dernière version stable)
+- **MySQL 8.4** : Base de données relationnelle (SQL) - Données structurées
+- **MongoDB 7.x** : Base de données NoSQL - Logs d'activité et statistiques
 - **PDO (PHP Data Objects)** : Accès sécurisé à la base de données MySQL
 - **MongoDB PHP Extension** : Accès à MongoDB pour les logs
 - **Apache** : Serveur web
@@ -524,7 +524,9 @@ Les données sont validées à la fois côté client (JavaScript) et côté serv
 ### Versions testées et qui fonctionnent
 - ✅ PHP 8.1.0 - Fonctionne parfaitement
 - ✅ PHP 8.2.0 - Fonctionne parfaitement
+- ✅ PHP 8.3.0 - Fonctionne parfaitement (version Docker)
 - ✅ MySQL 8.0 - Fonctionne parfaitement
+- ✅ MySQL 8.4 - Fonctionne parfaitement (version Docker)
 - ✅ MySQL 5.7 - Fonctionne aussi
 
 ### Configuration Apache recommandée
